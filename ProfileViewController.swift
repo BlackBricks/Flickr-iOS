@@ -18,8 +18,7 @@ class ProfileViewController: UIViewController {
         setUserpic()
     }
     func setUserpic(){
-    //let myUIImage=UIImage(named: "0087.jpg")
-    //userpic.image = myUIImage
+
         let url = NSURL(string: "https://farm2.staticflickr.com/1767/42538632735_8a72cb797a_m.jpg")
         userpic.sd_setImage(with: url as URL?)
         

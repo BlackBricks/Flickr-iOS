@@ -19,9 +19,11 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     func setupWithPhoto(flickrPhoto: FlickrPhoto) {
         print ("adding photo...")
-        //let myUIImage=UIImage(named: "0087.jpg")
-        //resultImageView.image = myUIImage
+
+        resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL?)
+
        resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL?)
+
         
         
         
