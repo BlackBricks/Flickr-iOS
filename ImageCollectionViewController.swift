@@ -27,24 +27,13 @@ class ImageCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {return UICollectionViewCell()}
-            cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+        cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-                let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell
-        cell!.setupWithPhoto(flickrPhoto: photos[indexPath.row])//}
-        return cell!
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //performSegue(withIdentifier: "Show Image", sender: self)
         let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
         let photoViewController = mainStoryboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
         photoViewController.flickrPhoto = photos[indexPath.row]
         
@@ -60,8 +49,7 @@ class ImageCollectionViewController: UICollectionViewController {
                     })
                 }
             }
-
-
+            
         })
         if commentaries.isEmpty {
             print("COMMENTARIES NOT LOADED")
@@ -117,10 +105,6 @@ class ImageCollectionViewController: UICollectionViewController {
                 onCompletion(error, nil)
                 return
             }
-
-
-            
-
         })
         searchTask.resume()
     }
