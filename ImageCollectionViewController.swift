@@ -16,6 +16,8 @@ class ImageCollectionViewController: UICollectionViewController {
     var photos: [FlickrPhoto]=[]
     var commentaries:[Commentary]=[]
     
+    
+    
     // MARK: UICollectionViewDataSource
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -43,29 +45,27 @@ class ImageCollectionViewController: UICollectionViewController {
                 print("COMMENTS ARE SET")
                             } else {
                 self.commentaries = []
-                if (error!.code == FlickrPopularRequest.Errors.invalidAccessErrorCode) {
+                if (error!.code == FlickrSearchRequest.Errors.invalidAccessErrorCode) {
                     DispatchQueue.main.async(execute: { () -> Void in
                         self.showErrorAlert()
                     })
                 }
             }
-            
+            photoViewController.commentaries = commentaries!
         })
-        if commentaries.isEmpty {
-            print("COMMENTARIES NOT LOADED")
-        }
-        photoViewController.commentaries = commentaries
-        
-        self.navigationController?.pushViewController(photoViewController, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1/2),execute:{
+            self.navigationController?.pushViewController(photoViewController, animated: true)})
     }
+    
     struct Errors {
         static let invalidAccessErrorCode = 100
     }
     
     func commentaryLoading( photoId:String, onCompletion: @escaping FlickrResponse) -> Void {
         print("START FETCHING COMMENTS")
+        print("photoID\(photoId)")
         //let escapedText: String = photoId.addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)!
-        let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=1ebbbfd26e664bd73f3dd4f88153e6e3&photo_id=42548213265&format=json&nojsoncallback=1"
+        let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=1ebbbfd26e664bd73f3dd4f88153e6e3&photo_id=\(photoId)&format=json&nojsoncallback=1"
         let url: NSURL = NSURL(string: urlString)!
         let searchTask = URLSession.shared.dataTask(with: url as URL, completionHandler: {data, response, error -> Void in
             if error != nil {

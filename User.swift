@@ -11,8 +11,12 @@ import UIKit
 
 struct User {
     
-    let id: String
-    let requestToken: String
-    let accessToken: String
-    
+//    let id: String
+//    let requestToken: String
+//    let accessToken: String
+    let firstName: String
+    let lastName: String
+    let country: String
+    let city: String
+    let description: String
 }

@@ -10,18 +10,53 @@ import UIKit
 import SDWebImage
 
 class ProfileViewController: UIViewController {
-
+    
     @IBOutlet weak var userpic: UIImageView!
+    
+    //var userInfo:User?
+    
+    var users:[User]=[]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUserpic()
+        self.performRequest()
     }
     func setUserpic(){
-
         let url = NSURL(string: "https://farm2.staticflickr.com/1767/42538632735_8a72cb797a_m.jpg")
         userpic.sd_setImage(with: url as URL?)
+    }
+    
+    
+    private func performRequest(/*userId: String*/) {
+        FlickrProfileRequest.fetchProfileForRequest(userId: "38181284%40N06", onCompletion: {(error: NSError?, userInfo:[User]?) -> Void in
+            if error == nil {
+                self.users = userInfo!
+                print("INFO IS LOADED")
+                
+            } else {
+                self.users = []
+                if (error!.code == FlickrSearchRequest.Errors.invalidAccessErrorCode) {
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        //self.showErrorAlert()
+                    })
+                }
+            }
+            DispatchQueue.main.async(execute: { () -> Void in
+                //self.performSegue(withIdentifier: "Show User Info", sender: self)
+            })
+        })
         
-        
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show User Info" {
+            let profileInfoViewController = segue.destination as! ProfileInfoViewController
+            //performRequest()
+//            if users.isEmpty{
+//                print("INFO NOT LOADED")
+//            }
+            let testUser = User(firstName: "KIRILL", lastName: "SHTEFFEN", country: "RUSSIA", city: "OMSK", description: "HELL AS IS AND IM VERY HAPPY")
+            profileInfoViewController.userInfo = testUser
+        }
     }
 }
