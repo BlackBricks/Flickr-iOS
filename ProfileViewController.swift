@@ -13,7 +13,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var userpic: UIImageView!
     
-    //var userInfo:User?
+    
     
     var users:[User]=[]
     
@@ -28,7 +28,7 @@ class ProfileViewController: UIViewController {
     }
     
     
-    private func performRequest(/*userId: String*/) {
+    private func performRequest() {
         FlickrProfileRequest.fetchProfileForRequest(userId: "38181284%40N06", onCompletion: {(error: NSError?, userInfo:[User]?) -> Void in
             if error == nil {
                 self.users = userInfo!
@@ -38,12 +38,12 @@ class ProfileViewController: UIViewController {
                 self.users = []
                 if (error!.code == FlickrSearchRequest.Errors.invalidAccessErrorCode) {
                     DispatchQueue.main.async(execute: { () -> Void in
-                        //self.showErrorAlert()
+                        
                     })
                 }
             }
             DispatchQueue.main.async(execute: { () -> Void in
-                //self.performSegue(withIdentifier: "Show User Info", sender: self)
+                
             })
         })
         
@@ -51,10 +51,6 @@ class ProfileViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show User Info" {
             let profileInfoViewController = segue.destination as! ProfileInfoViewController
-            //performRequest()
-//            if users.isEmpty{
-//                print("INFO NOT LOADED")
-//            }
             let testUser = User(firstName: "KIRILL", lastName: "SHTEFFEN", country: "RUSSIA", city: "OMSK", description: "HELL AS IS AND IM VERY HAPPY")
             profileInfoViewController.userInfo = testUser
         }
