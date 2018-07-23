@@ -26,8 +26,8 @@ class ProfileInfoViewController: UIViewController {
         super.viewDidLoad()
         firstName.text = userInfo?.profile.first_name
         lastName.text = userInfo?.profile.last_name
-        country.text = userInfo?.country
-        city.text = userInfo?.city
-       userDescription.text = userInfo?.profile_description
+//        country.text = userInfo?.country
+//        city.text = userInfo?.city
+//       userDescription.text = userInfo?.profile_description
     }
 }
