@@ -10,7 +10,6 @@
 		157C24DAF114B48478C9E253 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 769225049BB125FF5590F509 /* Pods_FlickrViewer.framework */; };
 		77B88D91914166F7137F6238 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */; };
 		9149A52856496982593BCB30 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF3F8698139690D8F818D82 /* Pods_FlickrViewer.framework */; };
-		F318A39420EE860F00C8A23F /* SDWebImage in Resources */ = {isa = PBXBuildFile; fileRef = F318A39320EE860E00C8A23F /* SDWebImage */; };
 		F318A39620EE868500C8A23F /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F318A39520EE868500C8A23F /* SDWebImage.framework */; };
 		F35D25F52108730700364017 /* FlickrLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35D25F42108730700364017 /* FlickrLoginDelegate.swift */; };
 		F35D25F72108749200364017 /* BDBOUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35D25F62108749200364017 /* BDBOUser.swift */; };
@@ -41,7 +40,6 @@
 		769225049BB125FF5590F509 /* Pods_FlickrViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_FlickrViewer.framework; path = "/Users/stooper/Library/Developer/Xcode/DerivedData/FlickrViewer-cozrsixlysphtsfoxoxkthphzngy/Build/Products/Debug-iphoneos/Pods_FlickrViewer.framework"; sourceTree = "<absolute>"; };
 		7AF3F8698139690D8F818D82 /* Pods_FlickrViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlickrViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_FlickrViewer.framework; path = "/Users/stooper/Library/Developer/Xcode/DerivedData/FlickrViewer-cozrsixlysphtsfoxoxkthphzngy/Build/Products/Debug-iphoneos/Pods_FlickrViewer.framework"; sourceTree = "<absolute>"; };
-		F318A39320EE860E00C8A23F /* SDWebImage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SDWebImage; sourceTree = "<group>"; };
 		F318A39520EE868500C8A23F /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = SDWebImage.framework; path = "/Users/stooper/Library/Developer/Xcode/DerivedData/FlickrViewer-cozrsixlysphtsfoxoxkthphzngy/Build/Products/Debug-iphoneos/SDWebImage.framework"; sourceTree = "<absolute>"; };
 		F35D25F42108730700364017 /* FlickrLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrLoginDelegate.swift; sourceTree = "<group>"; };
 		F35D25F62108749200364017 /* BDBOUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDBOUser.swift; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 		F39F9AEA20DAA9CA00BC57B7 /* FlickrViewer */ = {
 			isa = PBXGroup;
 			children = (
-				F318A39320EE860E00C8A23F /* SDWebImage */,
 				F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */,
 				F3FB948920ECC0C90073B4C6 /* ImageCollectionViewController.swift */,
 				F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */,
@@ -223,7 +220,6 @@
 				F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */,
 				F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */,
 				F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */,
-				F318A39420EE860F00C8A23F /* SDWebImage in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
