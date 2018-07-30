@@ -21,7 +21,7 @@ class FlickrProfileRequest {
     
     class func fetchProfileForRequest( userId: String, onCompletion: @escaping FlickrResponse) -> Void {
         print("START FETCHING PROFILE")
-        let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.profile.getProfile&api_key=1ebbbfd26e664bd73f3dd4f88153e6e3&user_id=144273526%40N06&format=json&nojsoncallback=1"
+        let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.profile.getProfile&api_key=1ebbbfd26e664bd73f3dd4f88153e6e3&user_id=\(userId)&format=json&nojsoncallback=1"
         let url: NSURL = NSURL(string: urlString)!
         let searchTask = URLSession.shared.dataTask(with: url as URL, completionHandler: {data, response, error -> Void in
             if error != nil {

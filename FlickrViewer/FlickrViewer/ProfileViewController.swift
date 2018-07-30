@@ -23,13 +23,13 @@ class ProfileViewController: UIViewController {
         self.performRequest()
     }
     func setUserpic(){
-        let url = NSURL(string: "https://farm2.staticflickr.com/1767/42538632735_8a72cb797a_m.jpg")
+        let url = NSURL(string: "https://farm1.staticflickr.com/922/buddyicons/131138796@N08.jpg")
         userpic.sd_setImage(with: url as URL?)
     }
     
     
     private func performRequest() {
-        FlickrProfileRequest.fetchProfileForRequest(userId: "38181284%40N06", onCompletion: {(error: NSError?, userInfo:User?) -> Void in
+        FlickrProfileRequest.fetchProfileForRequest(userId: userId!, onCompletion: {(error: NSError?, userInfo:User?) -> Void in
             if error == nil {
                 self.userInfo = userInfo!
                 print("INFO IS LOADED")
