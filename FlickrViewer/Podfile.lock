@@ -1,22 +1,45 @@
 PODS:
+  - AFNetworking (3.0.4):
+    - AFNetworking/NSURLSession (= 3.0.4)
+    - AFNetworking/Reachability (= 3.0.4)
+    - AFNetworking/Security (= 3.0.4)
+    - AFNetworking/Serialization (= 3.0.4)
+    - AFNetworking/UIKit (= 3.0.4)
+  - AFNetworking/NSURLSession (3.0.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.0.4)
+  - AFNetworking/Security (3.0.4)
+  - AFNetworking/Serialization (3.0.4)
+  - AFNetworking/UIKit (3.0.4):
+    - AFNetworking/NSURLSession
+  - BDBOAuth1Manager (2.0.0):
+    - AFNetworking/NSURLSession (~> 3.0.0)
   - OAuthSwift (1.2.2)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
 
 DEPENDENCIES:
+  - AFNetworking
+  - BDBOAuth1Manager
   - OAuthSwift (~> 1.2.0)
   - SDWebImage (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - BDBOAuth1Manager
     - OAuthSwift
     - SDWebImage
 
 SPEC CHECKSUMS:
+  AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
+  BDBOAuth1Manager: 92d17d06f8a648602962304cd2f35ae7394fa001
   OAuthSwift: 27b34fe80b76b67cd8f45571e0be2432bc9f6de1
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
 
-PODFILE CHECKSUM: ccaa9402758055987f63d1b54641b1a1a028e8bf
+PODFILE CHECKSUM: 709e211da6b4be2eda8bf1492277801532e58396
 
 COCOAPODS: 1.5.3

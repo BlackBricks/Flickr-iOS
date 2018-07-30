@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B1B0D9297C9FBFF41F2D50274F094CC1"
+               BlueprintIdentifier = "12A321706E4C5DB844CFAF528B41BAE6"
                BuildableName = "Pods_FlickrViewer.framework"
                BlueprintName = "Pods-FlickrViewer"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B1B0D9297C9FBFF41F2D50274F094CC1"
+            BlueprintIdentifier = "12A321706E4C5DB844CFAF528B41BAE6"
             BuildableName = "Pods_FlickrViewer.framework"
             BlueprintName = "Pods-FlickrViewer"
             ReferencedContainer = "container:Pods.xcodeproj">

@@ -16,7 +16,7 @@ class ProfileViewController: UIViewController {
     
     
     var userInfo:User?
-    
+    var userId: String?
     override func viewDidLoad() {
         super.viewDidLoad()
         setUserpic()

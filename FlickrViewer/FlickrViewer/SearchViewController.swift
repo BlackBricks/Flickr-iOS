@@ -12,21 +12,41 @@ import SafariServices
 
 class SearchViewController:UIViewController, UISearchControllerDelegate,UISearchBarDelegate {
     
-
+    let oauthToken: String? = nil
+    
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBAction func authorize(_ sender: UIButton) {
-            let handle = flickrAuth.authorize(
+        
+//        FlickrClient.sharedInstance?.login(success: {
+//            print("Logged in")
+//            self.dismiss(animated: true, completion: {})
+//        }){(error) in
+//            print(error)
+//        }
+        
+        
+       let _ = flickrAuth.authorize(
             withCallbackURL: URL(string: "flickrviewer://oauth-callback/flickr")!,
                 success: { credential, response, parameters in
-                    print(credential.oauthToken)
-                    print(credential.oauthTokenSecret)
-                    print(parameters["user_id"])
+
+                    print("oauthToken:\(credential.oauthToken)")
+                    print("oauthTokeSecret:\(credential.oauthTokenSecret)")
+                    print(parameters/*["user_id"]*/)
+                    self.userId = parameters["user_id"] as? String
+
             },
                 failure: { error in
                     print(error.localizedDescription)
             }
             )
+        //testFlickr(flickrAuth, consumerKey: "1ebbbfd26e664bd73f3dd4f88153e6e3")
+            }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if userId != nil{
+            self.performSegue(withIdentifier: "Profile", sender: self)}
     }
     
     let flickrAuth = OAuth1Swift(
@@ -35,13 +55,14 @@ class SearchViewController:UIViewController, UISearchControllerDelegate,UISearch
         requestTokenUrl: "https://www.flickr.com/services/oauth/request_token",
         authorizeUrl: "https://www.flickr.com/services/oauth/authorize",
         accessTokenUrl: "https://www.flickr.com/services/oauth/access_token"
+        
     )
     
    
     func testFlickr (_ oauthswift: OAuth1Swift, consumerKey: String) {
         let url :String = "https://api.flickr.com/services/rest/"
         let parameters :Dictionary = [
-            "method"         : "flickr.photos.getRecent",
+            "method"         : "flickr.auth.oauth.checkToken",
             "api_key"        : consumerKey,
             "user_id"        : "159293991@N05",
             "format"         : "json",
@@ -59,8 +80,9 @@ class SearchViewController:UIViewController, UISearchControllerDelegate,UISearch
         }
         )
     }
-    var photos: [FlickrPhoto] = []
     
+    var photos: [FlickrPhoto] = []
+    var userId:String?
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         performRequest(searchText: searchBar.text!)
@@ -95,7 +117,7 @@ class SearchViewController:UIViewController, UISearchControllerDelegate,UISearch
         }
         if segue.identifier == "Profile"{
             let profileViewController = segue.destination as! ProfileViewController
-            ";oehvwpervuhwepviweurvbwpeirvbw"
+            profileViewController.userId = userId
         }
     }
     
