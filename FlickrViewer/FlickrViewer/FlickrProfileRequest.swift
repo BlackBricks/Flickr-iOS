@@ -29,19 +29,19 @@ class FlickrProfileRequest {
                 onCompletion(error as NSError?, nil)
                 return
             }
-            do { print("\(data)")
+            do { print("\(String(describing: data))")
 //                
                 let profile = try! JSONDecoder().decode(User.self, from: data!)
                 dump(profile)
                   
                 onCompletion(nil, profile)
                 
-            } catch let error as NSError {
-                print("Error parsing JSON: \(error)")
-                onCompletion(error, nil)
-                return
             }
-            
+//            catch let error as NSError {
+//                print("Error parsing JSON: \(error)")
+//                onCompletion(error, nil)
+//                return
+//            }
         })
         searchTask.resume()
     }

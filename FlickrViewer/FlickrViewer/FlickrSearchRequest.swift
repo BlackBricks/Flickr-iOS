@@ -33,7 +33,7 @@ class FlickrSearchRequest {
                         do {
                 let resultsDictionary = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject]
                 guard let results = resultsDictionary else { return }
-                print("\(resultsDictionary)")
+                            print("\(resultsDictionary ?? [:])")
                     if let statusCode = results["code"] as? Int {
                     if statusCode == Errors.invalidAccessErrorCode {
                         let invalidAccessError = NSError(domain: "com.flickr.api", code: statusCode, userInfo: nil)
