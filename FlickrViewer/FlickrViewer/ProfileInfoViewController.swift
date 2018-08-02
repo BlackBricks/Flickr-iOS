@@ -11,14 +11,10 @@ import UIKit
 class ProfileInfoViewController: UIViewController {
     
     @IBOutlet weak var firstName: UILabel!
-    
     @IBOutlet weak var lastName: UILabel!
-    
     @IBOutlet weak var country: UILabel!
     @IBOutlet weak var city: UILabel!
-    
     @IBOutlet weak var userDescription: UILabel!
-    
     
     var userInfo:User?
     
@@ -26,8 +22,5 @@ class ProfileInfoViewController: UIViewController {
         super.viewDidLoad()
         firstName.text = userInfo?.profile.first_name
         lastName.text = userInfo?.profile.last_name
-//        country.text = userInfo?.country
-//        city.text = userInfo?.city
-//       userDescription.text = userInfo?.profile_description
     }
 }

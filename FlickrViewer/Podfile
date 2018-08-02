@@ -6,8 +6,9 @@ target 'FlickrViewer' do
   use_frameworks!
 
   # Pods for FlickrViewer
-pod 'SDWebImage','~>4.0'
-pod 'OAuthSwift','~>1.2.0'
-pod 'BDBOAuth1Manager'
-pod 'AFNetworking'
+pod 'SDWebImage','~>4.4.1'
+pod 'OAuthSwift','~>1.2.2'
+pod 'Alamofire', '~>4.7.2'
+pod 'OAuthSwiftAlamofire', '~>0.2.0'
+
 end

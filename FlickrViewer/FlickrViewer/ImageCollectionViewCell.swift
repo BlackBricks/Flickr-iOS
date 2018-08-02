@@ -6,23 +6,15 @@
 //  Copyright © 2018 BlackBricks. All rights reserved.
 //
 
-import Foundation
-import UIKit
+
 import SDWebImage
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    
-    
     @IBOutlet weak var resultImageView: UIImageView!
     
-    
-    func setupWithPhoto(flickrPhoto: FlickrPhoto) {
+    func setupWithPhoto(flickrPhoto: Photo) {
         print ("adding photo...")
         resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL?)
-        
-        
-        
     }
-    
 }

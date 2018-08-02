@@ -7,38 +7,33 @@
 //
 
 import UIKit
-import Foundation
 
-class PhotoViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
+class PhotoViewController: UIViewController {
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    var commentaries: [Commentary] = []
-    var flickrPhoto: FlickrPhoto?
+    var comments: [Comment] = []
+    var flickrPhoto: Photo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
-        tableView.delegate = self
         if flickrPhoto != nil {
             photoImageView.sd_setImage(with: flickrPhoto!.photoUrl as URL?)
         }
-        
     }
+}
+    //MARK: - UITableViewDataSource
+extension PhotoViewController:UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return commentaries.count
+        return comments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Commentary Cell", for: indexPath ) as? CommentaryTableViewCell
-        cell!.commentSetup(comment: commentaries[indexPath.row])
-                
+        cell!.commentSetup(comment: comments[indexPath.row])
         return cell!
     }
-    
-    
-    
 }

@@ -6,11 +6,8 @@
 //  Copyright © 2018 BlackBricks. All rights reserved.
 //
 
-import Foundation
-import UIKit
-
 struct User:Codable {
-    var profile: Profile
+    let profile: Profile
 }
 struct Profile:Codable {
     let first_name: String

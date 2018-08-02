@@ -9,15 +9,12 @@
 import UIKit
 
 class CommentaryTableViewCell: UITableViewCell {
-
     
     @IBOutlet weak var author: UILabel!
-    
     @IBOutlet weak var commentaryText: UILabel!
     
-    func commentSetup(comment:Commentary){
-        author.text = comment.commentaryAuthor
-        commentaryText.text = comment.commentaryText
+    func commentSetup(comment:Comment){
+        author.text = comment.authorname
+        commentaryText.text = comment._content
     }
-    
 }

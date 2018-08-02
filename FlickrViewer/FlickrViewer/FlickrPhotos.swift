@@ -7,19 +7,22 @@
 //
 
 import Foundation
-import UIKit
 
-struct FlickrPhoto {
-    
-    let photoId: String
+struct FlickrPhotos: Codable{
+    let photos:FlickrPhoto
+}
+struct FlickrPhoto:Codable {
+    let photo:[Photo]
+}
+struct Photo:Codable {
+    let id: String
     let farm: Int
     let secret: String
     let server: String
     let title: String
     
     var photoUrl: NSURL {
-        return NSURL(string: "https://farm\(farm).staticflickr.com/\(server)/\(photoId)_\(secret)_m.jpg")!
+        return NSURL(string: "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_m.jpg")!
     }
-    
 }
 
