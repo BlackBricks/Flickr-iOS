@@ -16,7 +16,7 @@ class ProfileInfoViewController: UIViewController {
     @IBOutlet weak var city: UILabel!
     @IBOutlet weak var userDescription: UILabel!
     
-    var userInfo:User?
+    var userInfo: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()

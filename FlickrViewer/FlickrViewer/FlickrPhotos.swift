@@ -9,12 +9,12 @@
 import Foundation
 
 struct FlickrPhotos: Codable{
-    let photos:FlickrPhoto
+    let photos: FlickrPhoto
 }
-struct FlickrPhoto:Codable {
-    let photo:[Photo]
+struct FlickrPhoto: Codable {
+    let photo: [Photo]
 }
-struct Photo:Codable {
+struct Photo: Codable {
     let id: String
     let farm: Int
     let secret: String

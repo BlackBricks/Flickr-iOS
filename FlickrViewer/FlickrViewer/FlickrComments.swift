@@ -11,7 +11,7 @@ struct FlickrComments: Codable {
     let comments: CommentsArray
 }
 struct CommentsArray: Codable {
-    let comment:[Comment]
+    let comment: [Comment]
 }
 struct Comment: Codable {
     let authorname: String

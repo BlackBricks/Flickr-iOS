@@ -10,25 +10,26 @@ import UIKit
 import OAuthSwift
 import Alamofire
 
-class SearchViewController:UIViewController, UISearchBarDelegate {
+class SearchViewController: UIViewController, UISearchBarDelegate {
     
     var photoArray: [Photo] = []
-    var userId:String? = nil
-    let flickrKey = "1ebbbfd26e664bd73f3dd4f88153e6e3"
+    var userId: String? = nil
+    private let flickrApiKey = "1ebbbfd26e664bd73f3dd4f88153e6e3"
     
     //MARK- Search
     @IBOutlet weak var searchBar: UISearchBar!
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searching(searchText: searchBar.text!)
+        flickrPhotoSearching(searchText: searchBar.text!)
     }
     
-    func searching (searchText: String){
-        let escapedSearchText: String = searchText.addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)!
-        let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrKey)&tags=\(escapedSearchText)&per_page=50&format=json&nojsoncallback=1"
-        Alamofire.request(urlString).responseJSON{response in
-            let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: response.data!)
-            self.photoArray = (flickrPhotos?.photos.photo)!
+    private func flickrPhotoSearching (searchText: String){
+        let escapedSearchText: String = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let requestUrl: String = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrApiKey)&tags=\(escapedSearchText)&per_page=50&format=json&nojsoncallback=1"
+        Alamofire.request(requestUrl).responseJSON{response in
+            guard response.data != nil else{return}
+                let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: response.data!)
+                self.photoArray = (flickrPhotos?.photos.photo)!
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2),execute:{
             self.performSegue(withIdentifier: "ShowPhotoCollection", sender: self)})
@@ -58,7 +59,7 @@ class SearchViewController:UIViewController, UISearchBarDelegate {
         accessTokenUrl: "https://www.flickr.com/services/oauth/access_token"
     )
     
-    func testFlickr (_ oauthswift: OAuth1Swift, consumerKey: String) {
+    private func testFlickr (_ oauthswift: OAuth1Swift, consumerKey: String) {
         let url :String = "https://api.flickr.com/services/rest/"
         let parameters :Dictionary = [
             "method"         : "flickr.auth.oauth.getAccessToken",

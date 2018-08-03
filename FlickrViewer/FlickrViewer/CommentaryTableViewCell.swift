@@ -13,7 +13,7 @@ class CommentaryTableViewCell: UITableViewCell {
     @IBOutlet weak var author: UILabel!
     @IBOutlet weak var commentaryText: UILabel!
     
-    func commentSetup(comment:Comment){
+    func commentSetup(comment: Comment){
         author.text = comment.authorname
         commentaryText.text = comment._content
     }

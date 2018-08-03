@@ -13,7 +13,6 @@
 		F318A39620EE868500C8A23F /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F318A39520EE868500C8A23F /* SDWebImage.framework */; };
 		F39F9AEC20DAA9CA00BC57B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */; };
 		F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AEF20DAA9CA00BC57B7 /* Main.storyboard */; };
-		F39F9AF420DAA9CA00BC57B7 /* FlickrViewer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F39F9AF220DAA9CA00BC57B7 /* FlickrViewer.xcdatamodeld */; };
 		F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */; };
 		F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF720DAA9CF00BC57B7 /* LaunchScreen.storyboard */; };
 		F3A1B55920FC8A8F00EDD408 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A1B55820FC8A8E00EDD408 /* ProfileViewController.swift */; };
@@ -39,7 +38,6 @@
 		F39F9AE820DAA9CA00BC57B7 /* FlickrViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F39F9AF020DAA9CA00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		F39F9AF320DAA9CA00BC57B7 /* FlickrViewer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FlickrViewer.xcdatamodel; sourceTree = "<group>"; };
 		F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F39F9AF820DAA9CF00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F39F9AFA20DAA9CF00BC57B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */,
 				F39F9AF720DAA9CF00BC57B7 /* LaunchScreen.storyboard */,
 				F39F9AFA20DAA9CF00BC57B7 /* Info.plist */,
-				F39F9AF220DAA9CA00BC57B7 /* FlickrViewer.xcdatamodeld */,
 			);
 			path = FlickrViewer;
 			sourceTree = "<group>";
@@ -255,7 +252,6 @@
 				F3FB948A20ECC0C90073B4C6 /* ImageCollectionViewController.swift in Sources */,
 				F3FB948820ECBE450073B4C6 /* ImageCollectionViewCell.swift in Sources */,
 				F3E2A27520F5DD3C0006CDD1 /* SearchViewController.swift in Sources */,
-				F39F9AF420DAA9CA00BC57B7 /* FlickrViewer.xcdatamodeld in Sources */,
 				F3CC35992101ABD70006DF65 /* ProfileInfoViewController.swift in Sources */,
 				F3E194D220EEA8F800AC3016 /* PhotoViewController.swift in Sources */,
 				F3A1B55920FC8A8F00EDD408 /* ProfileViewController.swift in Sources */,
@@ -465,19 +461,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		F39F9AF220DAA9CA00BC57B7 /* FlickrViewer.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F39F9AF320DAA9CA00BC57B7 /* FlickrViewer.xcdatamodel */,
-			);
-			currentVersion = F39F9AF320DAA9CA00BC57B7 /* FlickrViewer.xcdatamodel */;
-			path = FlickrViewer.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = F39F9AE020DAA9CA00BC57B7 /* Project object */;
 }

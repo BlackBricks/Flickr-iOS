@@ -183,16 +183,6 @@
                                     <action selector="authorize:" destination="vWL-67-Ln9" eventType="touchUpInside" id="6HC-WU-xen"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HAh-sv-9a2">
-                                <rect key="frame" x="110" y="269" width="154" height="88"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94322781739999995" green="0.94322781739999995" blue="0.94322781739999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="Profile"/>
-                                <connections>
-                                    <segue destination="S91-RS-ZTO" kind="show" identifier="Profile" id="lRW-HY-J67"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="I22-ht-6Gh"/>

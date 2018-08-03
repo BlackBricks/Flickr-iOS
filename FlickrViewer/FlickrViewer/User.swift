@@ -9,7 +9,7 @@
 struct User:Codable {
     let profile: Profile
 }
-struct Profile:Codable {
+struct Profile: Codable {
     let first_name: String
     let last_name: String
 }
