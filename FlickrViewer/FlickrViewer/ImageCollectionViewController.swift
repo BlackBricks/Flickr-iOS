@@ -25,12 +25,14 @@ class ImageCollectionViewController: UICollectionViewController {
         return cell
     }
     
+    //override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionV)
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let photoViewController = mainStoryboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
         photoViewController.flickrPhoto = photos[indexPath.row]
         commentsLoading(photoId: photos[indexPath.row].id)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1),execute:{
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1),execute:{ //Correct that loading
             photoViewController.comments = self.photoComments
             self.navigationController?.pushViewController(photoViewController, animated: true)})
     }
@@ -40,8 +42,8 @@ class ImageCollectionViewController: UICollectionViewController {
         print("Start requesting comments")
         let requestUrl: String = "https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=\(flickrApiKey)&photo_id=\(photoId)&format=json&nojsoncallback=1"
         Alamofire.request(requestUrl).responseJSON{response in
-            guard response.data != nil else{return}
-            let commentsArray = try? JSONDecoder().decode(FlickrComments.self, from: response.data!)
+            guard let commentsData = response.data else{return}
+            let commentsArray = try? JSONDecoder().decode(FlickrComments.self, from: commentsData)
             dump(commentsArray)
             if commentsArray != nil {
                 self.photoComments = (commentsArray?.comments.comment)!}

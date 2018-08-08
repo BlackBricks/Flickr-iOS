@@ -7,33 +7,34 @@
 //
 
 import UIKit
+import Alamofire
 
 class PhotoViewController: UIViewController {
     
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var tableView: UITableView!
+    
     
     var comments: [Comment] = []
     var flickrPhoto: Photo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
         if flickrPhoto != nil {
             photoImageView.sd_setImage(with: flickrPhoto!.photoUrl as URL?)
         }
-    }
-}
-    //MARK: - UITableViewDataSource
-extension PhotoViewController:UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return comments.count
+        largePhotoRequest()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Commentary Cell", for: indexPath ) as? CommentaryTableViewCell
-        cell!.commentSetup(comment: comments[indexPath.row])
-        return cell!
+    private func largePhotoRequest(){
+        let requestUrl: String = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=4b3a3f61c9980336cc603ab62a100a76&photo_id=\(flickrPhoto?.id ?? "42917344375")&format=json&nojsoncallback=1"
+        Alamofire.request(requestUrl).responseJSON{response in
+            guard let photoSizesData = response.data else{return}
+            let largePhoto = try? JSONDecoder().decode(FlickrPhotosSizes.self, from: photoSizesData)
+            dump(largePhoto)
+            
+            self.photoImageView.sd_setImage(with: largePhoto?.sizes.size[4].source as URL?)
+        }
     }
 }
+
+

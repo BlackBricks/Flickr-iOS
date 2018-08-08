@@ -12,82 +12,56 @@ import Alamofire
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
-    var photoArray: [Photo] = []
+    var photos: [Photo] = []
     var userId: String? = nil
     private let flickrApiKey = "1ebbbfd26e664bd73f3dd4f88153e6e3"
     
     //MARK- Search
     @IBOutlet weak var searchBar: UISearchBar!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         flickrPhotoSearching(searchText: searchBar.text!)
+        
     }
     
     private func flickrPhotoSearching (searchText: String){
         let escapedSearchText: String = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let requestUrl: String = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrApiKey)&tags=\(escapedSearchText)&per_page=50&format=json&nojsoncallback=1"
         Alamofire.request(requestUrl).responseJSON{response in
-            guard response.data != nil else{return}
-                let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: response.data!)
-                self.photoArray = (flickrPhotos?.photos.photo)!
+            guard let photoData = response.data else{return}
+                let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
+                self.photos = (flickrPhotos?.photos.photo)!
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2),execute:{
-            self.performSegue(withIdentifier: "ShowPhotoCollection", sender: self)})
+            dump(self.photos)
+            self.collectionView.reloadData()
+    })
+    }
+}
+
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate{
+    
+    // MARK: UICollectionViewDataSource
+   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return photos.count
     }
     
-    //MARK - Authorization
-    @IBAction func authorize(_ sender: UIButton) {
-        let _ = flickrAuth.authorize(
-            withCallbackURL: URL(string: "flickrviewer://oauth-callback/flickr")!,
-            success: { credential, response, parameters in
-                print("oauthToken:\(credential.oauthToken)")
-                print("oauthTokeSecret:\(credential.oauthTokenSecret)")
-                print("user_nsID: \(parameters["user_nsid"]!)")
-                self.userId = (parameters["user_nsid"] as! String)
-                self.performSegue(withIdentifier: "Profile", sender: self)
-        },
-            failure: {
-                error in
-                print(error.localizedDescription)
-        })}
-    
-    let flickrAuth = OAuth1Swift(
-        consumerKey: "1ebbbfd26e664bd73f3dd4f88153e6e3",
-        consumerSecret: "10d4d671ddf8546a",
-        requestTokenUrl: "https://www.flickr.com/services/oauth/request_token",
-        authorizeUrl: "https://www.flickr.com/services/oauth/authorize",
-        accessTokenUrl: "https://www.flickr.com/services/oauth/access_token"
-    )
-    
-    private func testFlickr (_ oauthswift: OAuth1Swift, consumerKey: String) {
-        let url :String = "https://api.flickr.com/services/rest/"
-        let parameters :Dictionary = [
-            "method"         : "flickr.auth.oauth.getAccessToken",
-            "api_key"        : consumerKey,
-            "user_id"        : "159293991@N05",
-            "format"         : "json",
-            "nojsoncallback" : "1",
-            "extras"         : "url_q,url_z"
-        ]
-        let _ = oauthswift.client.get(
-            url, parameters: parameters,
-            success: { response in
-                let jsonDict = try? response.jsonObject()
-                print(jsonDict as Any)
-        },
-            failure: { error in
-                print(error)
-        })}
-    
-    //MARK - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowPhotoCollection" {
-            let imageCollectionViewController = segue.destination as! ImageCollectionViewController
-            imageCollectionViewController.photos = photoArray
-        }
-        if segue.identifier == "Profile"{
-            let profileViewController = segue.destination as! ProfileViewController
-            profileViewController.userId = userId
-        }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {return UICollectionViewCell()}
+        cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+        return cell
     }
+    
+    //override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionV)
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let photoViewController = mainStoryboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
+        photoViewController.flickrPhoto = photos[indexPath.row]
+        //commentsLoading(photoId: photos[indexPath.row].id)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1),execute:{ //Correct that loading
+            //photoViewController.comments = self.photoComments
+            self.navigationController?.pushViewController(photoViewController, animated: true)})}
 }
