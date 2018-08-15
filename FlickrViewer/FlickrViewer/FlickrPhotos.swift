@@ -19,7 +19,8 @@ struct Photo: Codable {
     let farm: Int
     let secret: String
     let server: String
-    let title: String
+    let height_m: String
+    let width_m: String
     
     var photoUrl: NSURL {
         return NSURL(string: "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_m.jpg")!

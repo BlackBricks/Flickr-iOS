@@ -1,32 +1,26 @@
 PODS:
   - Alamofire (4.7.2)
-  - OAuthSwift (1.2.2)
-  - OAuthSwiftAlamofire (0.2.0):
-    - Alamofire
-    - OAuthSwift
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.7)
-  - OAuthSwift (~> 1.2.0)
-  - OAuthSwiftAlamofire
-  - SDWebImage (~> 4.0)
+  - Alamofire (= 4.7.2)
+  - SDWebImage (= 4.4.1)
+  - SwiftyJSON (= 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
-    - OAuthSwift
-    - OAuthSwiftAlamofire
     - SDWebImage
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
-  OAuthSwift: 27b34fe80b76b67cd8f45571e0be2432bc9f6de1
-  OAuthSwiftAlamofire: e51f11ff579dd4293bfe2a1a24c658caad4dac35
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 80ba3ab52db142680355ddc668f7128ea0beebbd
+PODFILE CHECKSUM: b7f57654be647b68dcf515a1d5512b909e6da95b
 
 COCOAPODS: 1.5.3

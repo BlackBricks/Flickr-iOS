@@ -11,7 +11,6 @@ import SDWebImage
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    
     @IBOutlet weak var resultImageView: UIImageView!
     
     func setupWithPhoto(flickrPhoto: Photo) {
