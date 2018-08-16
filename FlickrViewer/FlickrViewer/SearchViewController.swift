@@ -19,30 +19,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        flickrPhotoSearching(searchText: searchBar.text!)//make throwable
+        flickrPhotosSearching(searchText: searchBar.text!)
     }
     
-    
-    private func flickrPhotoSearching (searchText: String) {
-        let escapedSearchText: String = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    private func flickrPhotosSearching (searchText: String) {
         let requestUrl = FlickrURL()
-        let urlString = requestUrl.baseUrl+requestUrl.method+requestUrl.apiKey+requestUrl.searchTags+("\(escapedSearchText)")+requestUrl.extras+requestUrl.sort+requestUrl.photosPerPage+requestUrl.format
-        Alamofire.request(urlString).responseJSON{response in
+        let urlString = requestUrl.baseUrl+requestUrl.method+requestUrl.apiKey+requestUrl.searchTags+("\(searchText)")+requestUrl.extras+requestUrl.sort+requestUrl.photosPerPage+requestUrl.format
+        Alamofire.request(urlString).responseJSON{ [weak self] response in
             guard let photoData = response.data else{return}
             let flickrPhotos = try! JSONDecoder().decode(FlickrPhotos.self, from: photoData)
-            print(flickrPhotos)
-            self.photos = (flickrPhotos.photos.photo)
+            self?.photos = (flickrPhotos.photos.photo)
+            self?.collectionView.reloadData()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2),execute:{
-            self.collectionView.reloadData()
-        })
     }
 }
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     
     // MARK: UICollectionViewDataSource
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
@@ -58,13 +52,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout:UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         guard let photoHeight = Float(photos[indexPath.row].height_m) else {return CGSize(width: 0.0, height: 0.0)}
         guard let photoWidth = Float(photos[indexPath.row].width_m) else {return CGSize(width: 0.0, height: 0.0)}
         let aspectRatio = (photoWidth/photoHeight)
-        
-        
-        
         if let width = flowLayout?.itemSize.width{
             return CGSize(width: width, height: width/CGFloat(aspectRatio))
         }

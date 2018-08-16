@@ -14,7 +14,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var resultImageView: UIImageView!
     
     func setupWithPhoto(flickrPhoto: Photo) {
-        print ("adding photo...")
+        //print ("adding photo...")
         resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL?)
     }
 }
