@@ -3,24 +3,20 @@ PODS:
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
-  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Alamofire (= 4.7.2)
   - SDWebImage (= 4.4.1)
-  - SwiftyJSON (= 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - SDWebImage
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
-  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: b7f57654be647b68dcf515a1d5512b909e6da95b
+PODFILE CHECKSUM: 9077c4f50267468e3140be4ca3efc00264cfb49a
 
 COCOAPODS: 1.5.3
