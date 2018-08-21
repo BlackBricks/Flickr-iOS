@@ -19,7 +19,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshRecentFlickrPhotos), for: .valueChanged)
+        return refreshControl
+    }()
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView.refreshControl = refresher
         getRecentFlickrPhotos {
             print("Recent photos adding...")
             self.collectionView.reloadData()
@@ -37,6 +45,39 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         activityIndicator.startAnimating()
     }
     
+    @objc private func refreshRecentFlickrPhotos(){
+        let requestUrl = FlickrURL()
+        let flickrUrlString = requestUrl.baseUrl +
+            requestUrl.getRecentQuery +
+            requestUrl.apiKey +
+            requestUrl.extras +
+            requestUrl.recentPhotosPerPage +
+            requestUrl.format
+        print("\(flickrUrlString)")
+        Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+            guard let photoData = response.data else {
+                return
+            }
+            let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
+            guard let photoArray = flickrPhotos?.photos.photo else {
+                let error = UIAlertController(
+                    title: "Error", message: "Recent photos not set", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+                    print("Ok button tapped")
+                })
+                error.addAction(ok)
+                self?.present(error, animated: true, completion: nil)
+                self?.refresher.endRefreshing()
+                self?.activityIndicator.stopAnimating()
+                return
+            }
+            self?.photos = photoArray
+            self?.collectionView.reloadData()
+            self?.activityIndicator.stopAnimating()
+            self?.refresher.endRefreshing()
+        }
+    }
+
     private func getRecentFlickrPhotos(completion: @escaping () -> ()){
         let requestUrl = FlickrURL()
         let flickrUrlString = requestUrl.baseUrl +
@@ -59,6 +100,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
+                self?.refresher.endRefreshing()
                 self?.activityIndicator.stopAnimating()
                 return
             }
