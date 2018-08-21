@@ -70,6 +70,12 @@
                                     <outlet property="delegate" destination="vWL-67-Ln9" id="O8i-nz-B2s"/>
                                 </connections>
                             </searchBar>
+                            <activityIndicatorView hidden="YES" autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="p2t-cx-zjS">
+                                <rect key="frame" x="330" y="600" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
+                                <color key="color" cocoaTouchSystemColor="darkTextColor"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -83,6 +89,7 @@
                         <viewLayoutGuide key="safeArea" id="I22-ht-6Gh"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="p2t-cx-zjS" id="fTe-aJ-7Me"/>
                         <outlet property="collectionView" destination="XpK-pj-VvK" id="eSg-dS-r6u"/>
                         <outlet property="searchBar" destination="SMF-9A-zFx" id="QVK-sh-pvz"/>
                     </connections>

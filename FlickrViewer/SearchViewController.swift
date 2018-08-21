@@ -15,6 +15,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     //MARK- Search
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -22,14 +23,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         getRecentFlickrPhotos {
             print("Recent photos adding...")
             self.collectionView.reloadData()
+            self.activityIndicator.stopAnimating()
         }
+        activityIndicator.startAnimating()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         flickrPhotosSearch(searchText: searchBar.text!) {
             print("Search query successfull!")
             self.collectionView.reloadData()
+            self.activityIndicator.stopAnimating()
         }
+        activityIndicator.startAnimating()
     }
     
     private func getRecentFlickrPhotos(completion: @escaping () -> ()){
@@ -54,6 +59,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
+                self?.activityIndicator.stopAnimating()
                 return
             }
             self?.photos = photoArray
@@ -85,6 +91,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
+                self?.activityIndicator.stopAnimating()
                 return
             }
             self?.photos = photoArray
