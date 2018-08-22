@@ -12,7 +12,8 @@ import Alamofire
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
     private var photos: [Photo] = []
-    
+    private var fetchingMore = false
+    private var currentPage = 1
     //MARK- Search
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -28,7 +29,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.refreshControl = refresher
-        getRecentFlickrPhotos {
+        getRecentFlickrPhotos(pageNumber:1) {
             print("Recent photos adding...")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
@@ -46,12 +47,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     
     @objc private func refreshRecentFlickrPhotos(){
+        self.fetchingMore = true
         let requestUrl = FlickrURL()
+        let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
             requestUrl.getRecentQuery +
             requestUrl.apiKey +
             requestUrl.extras +
             requestUrl.recentPhotosPerPage +
+            requestUrl.page +
+            String(pageNumber) +
             requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
@@ -63,28 +68,35 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 let error = UIAlertController(
                     title: "Error", message: "Recent photos not set", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
-                    print("Ok button tapped")
+                    print("FETCHING ERROR")
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
                 self?.refresher.endRefreshing()
                 self?.activityIndicator.stopAnimating()
+                self?.fetchingMore = false
                 return
             }
             self?.photos = photoArray
+            print("Recent photos refreshed")
+            self?.fetchingMore = false
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
             self?.refresher.endRefreshing()
         }
     }
 
-    private func getRecentFlickrPhotos(completion: @escaping () -> ()){
+    private func getRecentFlickrPhotos(pageNumber: Int,completion: @escaping () -> ()){
+        self.fetchingMore = true
         let requestUrl = FlickrURL()
+        let pageNumber: Int = pageNumber
         let flickrUrlString = requestUrl.baseUrl +
             requestUrl.getRecentQuery +
             requestUrl.apiKey +
             requestUrl.extras +
             requestUrl.recentPhotosPerPage +
+            requestUrl.page +
+            String(pageNumber) +
             requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
@@ -96,14 +108,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 let error = UIAlertController(
                 title: "Error", message: "Recent photos not set", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
-                    print("Ok button tapped")
+                    print("FETCHING ERROR")
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
                 self?.refresher.endRefreshing()
                 self?.activityIndicator.stopAnimating()
+                self?.fetchingMore = false
                 return
             }
+            self?.fetchingMore = false
             self?.photos = photoArray
             completion()
         }
@@ -111,6 +125,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     private func flickrPhotosSearch(searchText: String, completion:  @escaping () -> ()) {
         let requestUrl = FlickrURL()
+        let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
             requestUrl.searchQuery +
             requestUrl.apiKey +
@@ -119,7 +134,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             requestUrl.extras +
             requestUrl.sort +
             requestUrl.photosPerPage +
+            requestUrl.page +
+            String(pageNumber) +
             requestUrl.format
+        print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
                 return
@@ -129,7 +147,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 let error = UIAlertController(
                     title: "Error", message: "Search query unsuccessfull!", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
-                    print("Ok button tapped")
+                    print("FETCHING ERROR")
                 })
                 error.addAction(ok)
                 self?.present(error, animated: true, completion: nil)
@@ -155,6 +173,25 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
         return cell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height {
+            if !fetchingMore{
+                self.activityIndicator.startAnimating()
+                //self.fetchingMore = true
+                getRecentFlickrPhotos(pageNumber:currentPage+1){
+                    self.currentPage += 1
+                    print("one more page loaded. CURRENT PAGE IS \(self.currentPage)")
+                    self.fetchingMore = false
+                    self.collectionView.reloadData()
+                    self.activityIndicator.stopAnimating()
+                }
+            }
+        }
     }
     
     private var flowLayout: UICollectionViewFlowLayout? {
