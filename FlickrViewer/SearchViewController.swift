@@ -8,12 +8,14 @@
 
 import UIKit
 import Alamofire
+import hkAlium
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
     private var photos: [Photo] = []
     private var fetchingMore = false
     private var currentPage = 1
+    
     //MARK- Search
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -28,6 +30,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.flowLayout?.delegate = self
+        self.flowLayout?.numberOfColumns = 2
+        self.flowLayout?.cellPadding = 2
         collectionView.refreshControl = refresher
         getRecentFlickrPhotos(pageNumber:1) {
             print("Recent photos adding...")
@@ -160,7 +165,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, CustomLayoutDelegate {
+    
+    
     
     // MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -182,7 +189,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         if offsetY > contentHeight - scrollView.frame.height {
             if !fetchingMore{
                 self.activityIndicator.startAnimating()
-                //self.fetchingMore = true
                 getRecentFlickrPhotos(pageNumber:currentPage+1){
                     self.currentPage += 1
                     print("one more page loaded. CURRENT PAGE IS \(self.currentPage)")
@@ -194,21 +200,35 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
     }
     
-    private var flowLayout: UICollectionViewFlowLayout? {
-        return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+    
+    private var flowLayout: UICustomCollectionViewLayout? {
+        return collectionView?.collectionViewLayout as? UICustomCollectionViewLayout
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, heightForItemAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
         guard let photoHeight = Float(photos[indexPath.row].height_m) else {
-            return CGSize(width: 0.0, height: 0.0)
+            return CGFloat(0)
         }
         guard let photoWidth = Float(photos[indexPath.row].width_m) else {
-            return CGSize(width: 0.0, height: 0.0)
+            return CGFloat(0)
         }
         let aspectRatio = (photoWidth / photoHeight)
-        if let width = flowLayout?.itemSize.width {
-            return CGSize(width: width, height: width / CGFloat(aspectRatio))
-        }
-        return CGSize(width: 0.0, height: 0.0)
+        if aspectRatio != 0 {
+            return CGFloat(photoHeight/2)}
+        return CGFloat(10)
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
+//            return CGSize(width: 0.0, height: 0.0)
+//        }
+//        guard let photoWidth = Float(photos[indexPath.row].width_m) else {
+//            return CGSize(width: 0.0, height: 0.0)
+//        }
+//        let aspectRatio = (photoWidth / photoHeight)
+//        if let width = flowLayout?.itemSize.width {
+//            return CGSize(width: width, height: width / CGFloat(aspectRatio))
+//        }
+//        return CGSize(width: 0.0, height: 0.0)
+//    }
 }
