@@ -9,14 +9,16 @@
 import UIKit
 import Alamofire
 import hkAlium
+import collection_view_layouts
+import GreedoLayout
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
     private var photos: [Photo] = []
+    //private var cellSizes: [CGSize] = []
     private var fetchingMore = false
     private var currentPage = 1
-    
-    //MARK- Search
+    private var flowLayout: ContentDynamicLayout = FlickrStyleFlowLayout()    //MARK- Search
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -30,9 +32,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.flowLayout?.delegate = self
-        self.flowLayout?.numberOfColumns = 2
-        self.flowLayout?.cellPadding = 2
+        self.flowLayout.delegate = self
+        self.flowLayout.contentPadding = ItemsPadding(horizontal: 10, vertical: 10)
+        self.flowLayout.cellsPadding = ItemsPadding(horizontal: 8, vertical: 8)
+        self.flowLayout.contentAlign = .left
+        collectionView.collectionViewLayout = flowLayout
+//        self.flowLayout?.numberOfColumns = 2
+//        self.flowLayout?.cellPadding = 2
         collectionView.refreshControl = refresher
         getRecentFlickrPhotos(pageNumber:1) {
             print("Recent photos adding...")
@@ -165,8 +171,17 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, CustomLayoutDelegate {
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, /*CustomLayoutDelegate,*/ ContentDynamicLayoutDelegate {
     
+    func cellSize(indexPath: IndexPath) -> CGSize {
+        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
+            return CGSize(width: 0, height: 0)
+                    }
+        guard let photoWidth = Float(photos[indexPath.row].width_m) else {
+            return CGSize(width: 0, height: 0)
+        }
+        return CGSize(width: CGFloat(photoWidth), height: CGFloat(photoHeight))
+    }
     
     
     // MARK: UICollectionViewDataSource
@@ -199,36 +214,11 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             }
         }
     }
-    
-    
-    private var flowLayout: UICustomCollectionViewLayout? {
-        return collectionView?.collectionViewLayout as? UICustomCollectionViewLayout
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, heightForItemAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
-        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
-            return CGFloat(0)
-        }
-        guard let photoWidth = Float(photos[indexPath.row].width_m) else {
-            return CGFloat(0)
-        }
-        let aspectRatio = (photoWidth / photoHeight)
-        if aspectRatio != 0 {
-            return CGFloat(photoHeight/2)}
-        return CGFloat(10)
-    }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+//    func collectionView(_ collectionView: UICollectionView, heightForItemAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
 //        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
-//            return CGSize(width: 0.0, height: 0.0)
+//            return CGFloat(0)
 //        }
-//        guard let photoWidth = Float(photos[indexPath.row].width_m) else {
-//            return CGSize(width: 0.0, height: 0.0)
-//        }
-//        let aspectRatio = (photoWidth / photoHeight)
-//        if let width = flowLayout?.itemSize.width {
-//            return CGSize(width: width, height: width / CGFloat(aspectRatio))
-//        }
-//        return CGSize(width: 0.0, height: 0.0)
+//            return CGFloat(photoHeight/2)
 //    }
 }

@@ -9,6 +9,8 @@ target 'FlickrViewer' do
 pod 'SDWebImage','4.4.1'
 pod 'Alamofire', '4.7.2'
 pod 'hkAlium'
+pod 'collection-view-layouts/FlickrLayout'
+pod 'GreedoLayout'
 
 
 end
