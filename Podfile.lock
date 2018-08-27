@@ -1,36 +1,22 @@
 PODS:
   - Alamofire (4.7.2)
-  - collection-view-layouts/Core (0.1.2)
-  - collection-view-layouts/FlickrLayout (0.1.2):
-    - collection-view-layouts/Core
-  - GreedoLayout (1.2.0)
-  - hkAlium (1.0.4)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
 
 DEPENDENCIES:
   - Alamofire (= 4.7.2)
-  - collection-view-layouts/FlickrLayout
-  - GreedoLayout
-  - hkAlium
   - SDWebImage (= 4.4.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
-    - collection-view-layouts
-    - GreedoLayout
-    - hkAlium
     - SDWebImage
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
-  collection-view-layouts: f3da16bf3211ecb885bb3e45160c2267edf5b65e
-  GreedoLayout: b1a1adc6ed5f281353225e3eb21d18cedee8e513
-  hkAlium: f45d32ef3abec16a12826212202a9b25b97d26df
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
 
-PODFILE CHECKSUM: 742a001d3edecfb4a85563e2bbff16e76571be89
+PODFILE CHECKSUM: 87a99dd3fddf86dfc15bcaa47f753324f3f6d387
 
 COCOAPODS: 1.5.3

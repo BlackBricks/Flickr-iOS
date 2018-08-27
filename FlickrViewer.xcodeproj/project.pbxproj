@@ -22,6 +22,30 @@
 		F3FB948F20ECDDDD0073B4C6 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3FB948E20ECDDDD0073B4C6 /* ImageIO.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F3EDAA8C2133C8C30086EC7F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A4B688131E4F80CA0037E5A7;
+			remoteInfo = Lay;
+		};
+		F3EDAA8E2133C8C30086EC7F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A4B6881C1E4F80CA0037E5A7;
+			remoteInfo = LayTests;
+		};
+		F3EDAA902133C8C30086EC7F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A4B688371E4FCA530037E5A7;
+			remoteInfo = Example;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		3B1D3EB03820EE7C864F22C4 /* Pods-FlickrViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlickrViewer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer.debug.xcconfig"; sourceTree = "<group>"; };
 		4A90DCCD06A79A1E51C801D6 /* Pods-FlickrViewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlickrViewer.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer.release.xcconfig"; sourceTree = "<group>"; };
@@ -37,6 +61,7 @@
 		F39F9AF820DAA9CF00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F39F9AFA20DAA9CF00BC57B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lay.xcodeproj; path = ../../MinLay/Lay/Lay.xcodeproj; sourceTree = "<group>"; };
 		F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhotos.swift; sourceTree = "<group>"; };
 		F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageCollectionViewCell.swift; path = "/Users/stooper/Flickr-iOS/FlickrViewer/FlickrViewer/ImageCollectionViewCell.swift"; sourceTree = "<absolute>"; };
 		F3FB948E20ECDDDD0073B4C6 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -101,9 +126,20 @@
 			path = FlickrViewer;
 			sourceTree = "<group>";
 		};
+		F3EDAA872133C8C30086EC7F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3EDAA8D2133C8C30086EC7F /* Lay.framework */,
+				F3EDAA8F2133C8C30086EC7F /* LayTests.xctest */,
+				F3EDAA912133C8C30086EC7F /* Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F3FB948D20ECDDDD0073B4C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */,
 				F318A39520EE868500C8A23F /* SDWebImage.framework */,
 				F3FB948E20ECDDDD0073B4C6 /* ImageIO.framework */,
 				862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */,
@@ -161,12 +197,42 @@
 			mainGroup = F39F9ADF20DAA9CA00BC57B7;
 			productRefGroup = F39F9AE920DAA9CA00BC57B7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F3EDAA872133C8C30086EC7F /* Products */;
+					ProjectRef = F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F39F9AE720DAA9CA00BC57B7 /* FlickrViewer */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F3EDAA8D2133C8C30086EC7F /* Lay.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Lay.framework;
+			remoteRef = F3EDAA8C2133C8C30086EC7F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F3EDAA8F2133C8C30086EC7F /* LayTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = LayTests.xctest;
+			remoteRef = F3EDAA8E2133C8C30086EC7F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F3EDAA912133C8C30086EC7F /* Example.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Example.app;
+			remoteRef = F3EDAA902133C8C30086EC7F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F39F9AE620DAA9CA00BC57B7 /* Resources */ = {
@@ -190,18 +256,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/GreedoLayout/GreedoLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/collection-view-layouts/collection_view_layouts.framework",
-				"${BUILT_PRODUCTS_DIR}/hkAlium/hkAlium.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GreedoLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/collection_view_layouts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hkAlium.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

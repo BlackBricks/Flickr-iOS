@@ -8,67 +8,74 @@
 
 import UIKit
 import Alamofire
-import hkAlium
-import collection_view_layouts
-import GreedoLayout
+import Lay
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
-    
+
     private var photos: [Photo] = []
-    //private var cellSizes: [CGSize] = []
     private var fetchingMore = false
     private var currentPage = 1
-    private var flowLayout: ContentDynamicLayout = FlickrStyleFlowLayout()    //MARK- Search
-    
+
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
-    
+
+
     lazy var refresher: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshRecentFlickrPhotos), for: .valueChanged)
         return refreshControl
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.flowLayout.delegate = self
-        self.flowLayout.contentPadding = ItemsPadding(horizontal: 10, vertical: 10)
-        self.flowLayout.cellsPadding = ItemsPadding(horizontal: 8, vertical: 8)
-        self.flowLayout.contentAlign = .left
-        collectionView.collectionViewLayout = flowLayout
-//        self.flowLayout?.numberOfColumns = 2
-//        self.flowLayout?.cellPadding = 2
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.frame = view.bounds
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.alwaysBounceVertical = true
+
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 4
+            layout.minimumInteritemSpacing = 4
+        }
+
+        view.addSubview(collectionView)
+
         collectionView.refreshControl = refresher
-        getRecentFlickrPhotos(pageNumber:1) {
+        getRecentFlickrPhotos(pageNumber: 1) {
+            sizeToArrayCollecting(photos: self.photos)
             print("Recent photos adding...")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
         }
         activityIndicator.startAnimating()
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         flickrPhotosSearch(searchText: searchBar.text!) {
+            sizeToArrayCollecting(photos: self.photos)
             print("Search query successfull!")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
         }
         activityIndicator.startAnimating()
     }
-    
-    @objc private func refreshRecentFlickrPhotos(){
+
+    @objc private func refreshRecentFlickrPhotos() {
         self.fetchingMore = true
+        unfetchedSizes = []
+        justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
-            requestUrl.getRecentQuery +
-            requestUrl.apiKey +
-            requestUrl.extras +
-            requestUrl.recentPhotosPerPage +
-            requestUrl.page +
-            String(pageNumber) +
-            requestUrl.format
+                requestUrl.getRecentQuery +
+                requestUrl.apiKey +
+                requestUrl.extras +
+                requestUrl.recentPhotosPerPage +
+                requestUrl.page +
+                String(pageNumber) +
+                requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
@@ -77,8 +84,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
-                    title: "Error", message: "Recent photos not set", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+                        title: "Error", message: "Recent photos not set", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                     print("FETCHING ERROR")
                 })
                 error.addAction(ok)
@@ -97,18 +104,20 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-    private func getRecentFlickrPhotos(pageNumber: Int,completion: @escaping () -> ()){
+    private func getRecentFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
         self.fetchingMore = true
+        unfetchedSizes = []
+        justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = pageNumber
         let flickrUrlString = requestUrl.baseUrl +
-            requestUrl.getRecentQuery +
-            requestUrl.apiKey +
-            requestUrl.extras +
-            requestUrl.recentPhotosPerPage +
-            requestUrl.page +
-            String(pageNumber) +
-            requestUrl.format
+                requestUrl.getRecentQuery +
+                requestUrl.apiKey +
+                requestUrl.extras +
+                requestUrl.recentPhotosPerPage +
+                requestUrl.page +
+                String(pageNumber) +
+                requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
@@ -117,8 +126,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
-                title: "Error", message: "Recent photos not set", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+                        title: "Error", message: "Recent photos not set", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                     print("FETCHING ERROR")
                 })
                 error.addAction(ok)
@@ -133,21 +142,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             completion()
         }
     }
-    
-    private func flickrPhotosSearch(searchText: String, completion:  @escaping () -> ()) {
+
+    private func flickrPhotosSearch(searchText: String, completion: @escaping () -> ()) {
+        unfetchedSizes = []
+        justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
-            requestUrl.searchQuery +
-            requestUrl.apiKey +
-            requestUrl.searchTags +
-            ("\(searchText)") +
-            requestUrl.extras +
-            requestUrl.sort +
-            requestUrl.photosPerPage +
-            requestUrl.page +
-            String(pageNumber) +
-            requestUrl.format
+                requestUrl.searchQuery +
+                requestUrl.apiKey +
+                requestUrl.searchTags +
+                ("\(searchText)") +
+                requestUrl.extras +
+                requestUrl.sort +
+                requestUrl.photosPerPage +
+                requestUrl.page +
+                String(pageNumber) +
+                requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
@@ -156,8 +167,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
-                    title: "Error", message: "Search query unsuccessfull!", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+                        title: "Error", message: "Search query unsuccessfull!", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                     print("FETCHING ERROR")
                 })
                 error.addAction(ok)
@@ -171,24 +182,37 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, /*CustomLayoutDelegate,*/ ContentDynamicLayoutDelegate {
-    
-    func cellSize(indexPath: IndexPath) -> CGSize {
-        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
-            return CGSize(width: 0, height: 0)
-                    }
-        guard let photoWidth = Float(photos[indexPath.row].width_m) else {
-            return CGSize(width: 0, height: 0)
+var unfetchedSizes: [CGSize] = []
+var justifiedSizes: [CGSize] = []
+
+func sizeToArrayCollecting(photos: [Photo]) {
+    for item in photos {
+        guard let width = Int(item.width_m) else {
+            return
         }
-        return CGSize(width: CGFloat(photoWidth), height: CGFloat(photoHeight))
+        guard let height = Int(item.height_m) else {
+            return
+        }
+        let size = CGSize(width: width, height: height)
+        unfetchedSizes.append(size)
     }
-    
-    
-    // MARK: UICollectionViewDataSource
+    justifiedSizes = unfetchedSizes.lay_justify(for: 363, preferredHeight: 180)
+}
+
+// MARK: UICollectionViewDataSource
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard justifiedSizes.count != 0 else {
+            return CGSize(width: 0.5, height: 0.5)
+        }
+        return justifiedSizes[indexPath.item]
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {
             return UICollectionViewCell()
@@ -196,15 +220,15 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
-        
+
         if offsetY > contentHeight - scrollView.frame.height {
-            if !fetchingMore{
+            if !fetchingMore {
                 self.activityIndicator.startAnimating()
-                getRecentFlickrPhotos(pageNumber:currentPage+1){
+                getRecentFlickrPhotos(pageNumber: currentPage + 1) {
                     self.currentPage += 1
                     print("one more page loaded. CURRENT PAGE IS \(self.currentPage)")
                     self.fetchingMore = false
@@ -214,11 +238,4 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             }
         }
     }
-
-//    func collectionView(_ collectionView: UICollectionView, heightForItemAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
-//        guard let photoHeight = Float(photos[indexPath.row].height_m) else {
-//            return CGFloat(0)
-//        }
-//            return CGFloat(photoHeight/2)
-//    }
 }
