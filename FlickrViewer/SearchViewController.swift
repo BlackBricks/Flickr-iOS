@@ -15,6 +15,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var photos: [Photo] = []
     private var fetchingMore = false
     private var currentPage = 1
+    private var viewWidth:CGFloat?
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -29,19 +30,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.frame = view.bounds
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.alwaysBounceVertical = true
-
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 4
             layout.minimumInteritemSpacing = 4
         }
-
-        view.addSubview(collectionView)
-
+  
         collectionView.refreshControl = refresher
         getRecentFlickrPhotos(pageNumber: 1) {
             sizeToArrayCollecting(photos: self.photos)
@@ -196,7 +189,7 @@ func sizeToArrayCollecting(photos: [Photo]) {
         let size = CGSize(width: width, height: height)
         unfetchedSizes.append(size)
     }
-    justifiedSizes = unfetchedSizes.lay_justify(for: 363, preferredHeight: 180)
+    justifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
 }
 
 // MARK: UICollectionViewDataSource
