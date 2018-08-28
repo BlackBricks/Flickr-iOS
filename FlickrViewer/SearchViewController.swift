@@ -21,10 +21,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
 
-
     lazy var refresher: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshRecentFlickrPhotos), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshExploreFlickrPhotos), for: .valueChanged)
+        sizeToArrayCollecting(photos: self.photos)
         return refreshControl
     }()
 
@@ -32,11 +32,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 4
-            layout.minimumInteritemSpacing = 4
+            layout.minimumInteritemSpacing = 0
         }
   
         collectionView.refreshControl = refresher
-        getRecentFlickrPhotos(pageNumber: 1) {
+        getExploreFlickrPhotos(pageNumber: 1) {
             sizeToArrayCollecting(photos: self.photos)
             print("Recent photos adding...")
             self.collectionView.reloadData()
@@ -55,20 +55,20 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         activityIndicator.startAnimating()
     }
 
-    @objc private func refreshRecentFlickrPhotos() {
+    @objc private func refreshExploreFlickrPhotos() {
         self.fetchingMore = true
         unfetchedSizes = []
         justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
-                requestUrl.getRecentQuery +
-                requestUrl.apiKey +
-                requestUrl.extras +
-                requestUrl.recentPhotosPerPage +
-                requestUrl.page +
-                String(pageNumber) +
-                requestUrl.format
+            requestUrl.interestingness +
+            requestUrl.apiKey +
+            requestUrl.extras +
+            requestUrl.recentPhotosPerPage +
+            requestUrl.page +
+            String(pageNumber) +
+            requestUrl.format
         print("\(flickrUrlString)")
         Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
@@ -77,7 +77,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
-                        title: "Error", message: "Recent photos not set", preferredStyle: .alert)
+                        title: "Error", message: "Explore refreshed photos not set", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                     print("FETCHING ERROR")
                 })
@@ -89,7 +89,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 return
             }
             self?.photos = photoArray
-            print("Recent photos refreshed")
+            print("Explore photos refreshed")
             self?.fetchingMore = false
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
@@ -97,14 +97,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-    private func getRecentFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
+    private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
         self.fetchingMore = true
         unfetchedSizes = []
         justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = pageNumber
         let flickrUrlString = requestUrl.baseUrl +
-                requestUrl.getRecentQuery +
+                requestUrl.interestingness +
                 requestUrl.apiKey +
                 requestUrl.extras +
                 requestUrl.recentPhotosPerPage +
@@ -119,7 +119,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
-                        title: "Error", message: "Recent photos not set", preferredStyle: .alert)
+                        title: "Error", message: "Explore photos not set", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
                     print("FETCHING ERROR")
                 })
@@ -131,7 +131,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 return
             }
             self?.fetchingMore = false
-            self?.photos = photoArray
+            self?.photos += photoArray
             completion()
         }
     }
@@ -139,6 +139,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private func flickrPhotosSearch(searchText: String, completion: @escaping () -> ()) {
         unfetchedSizes = []
         justifiedSizes = []
+        currentPage = 1
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
@@ -221,7 +222,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         if offsetY > contentHeight - scrollView.frame.height {
             if !fetchingMore {
                 self.activityIndicator.startAnimating()
-                getRecentFlickrPhotos(pageNumber: currentPage + 1) {
+                getExploreFlickrPhotos(pageNumber: currentPage + 1) {
+                    sizeToArrayCollecting(photos: self.photos)
                     self.currentPage += 1
                     print("one more page loaded. CURRENT PAGE IS \(self.currentPage)")
                     self.fetchingMore = false
