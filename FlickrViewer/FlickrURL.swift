@@ -18,7 +18,7 @@ struct FlickrURL {
     let extras = "&extras=url_o,url_m,owner_name,date_upload,views,icon_server"
     let sort = "&sort=relevance"
     let photosPerPage = "&per_page=50"
-    let recentPhotosPerPage = "&per_page=50"
+    let recentPhotosPerPage = "&per_page=30"
     let page = "&page="
     let format = "&format=json&nojsoncallback=1"
 }

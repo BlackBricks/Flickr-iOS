@@ -14,6 +14,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 
     private var photos: [Photo] = []
     private var fetchingMore = false
+    private var isRefresh = false
     private var currentPage = 1
     private var viewWidth:CGFloat?
 
@@ -38,7 +39,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.refreshControl = refresher
         getExploreFlickrPhotos(pageNumber: 1) {
             sizeToArrayCollecting(photos: self.photos)
-            print("Recent photos adding...")
+            print("Explore photos adding...")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
         }
@@ -56,9 +57,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 
     @objc private func refreshExploreFlickrPhotos() {
-        self.fetchingMore = true
+        self.fetchingMore = false
+        self.isRefresh = true
         unfetchedSizes = []
-        justifiedSizes = []
+        //justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
@@ -91,6 +93,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             self?.photos = photoArray
             print("Explore photos refreshed")
             self?.fetchingMore = false
+            self?.isRefresh = false
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
             self?.refresher.endRefreshing()
@@ -216,11 +219,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-
-        if offsetY > contentHeight - scrollView.frame.height {
-            if !fetchingMore {
+        if !fetchingMore,!isRefresh {
+            if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
+                isRefresh = false
                 self.activityIndicator.startAnimating()
                 getExploreFlickrPhotos(pageNumber: currentPage + 1) {
                     sizeToArrayCollecting(photos: self.photos)
