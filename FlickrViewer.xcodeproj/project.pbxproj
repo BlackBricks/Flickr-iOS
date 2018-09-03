@@ -16,6 +16,7 @@
 		F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AEF20DAA9CA00BC57B7 /* Main.storyboard */; };
 		F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */; };
 		F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF720DAA9CF00BC57B7 /* LaunchScreen.storyboard */; };
+		F3CC91BE21392AB100C22B24 /* glassIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = F3CC91BA21392AB000C22B24 /* glassIcon.png */; };
 		F3E2A27520F5DD3C0006CDD1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */; };
 		F3FB948620ECBB350073B4C6 /* FlickrPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */; };
 		F3FB948820ECBE450073B4C6 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */; };
@@ -60,6 +61,7 @@
 		F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F39F9AF820DAA9CF00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F39F9AFA20DAA9CF00BC57B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3CC91BA21392AB000C22B24 /* glassIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glassIcon.png; sourceTree = "<group>"; };
 		F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F3EDAA862133C8C30086EC7F /* Lay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lay.xcodeproj; path = ../../MinLay/Lay/Lay.xcodeproj; sourceTree = "<group>"; };
 		F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhotos.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */,
+				F3CC91BA21392AB000C22B24 /* glassIcon.png */,
 				F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */,
 				F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */,
 				F370EC11212564650068ED7B /* FlickrURL.swift */,
@@ -239,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3CC91BE21392AB100C22B24 /* glassIcon.png in Resources */,
 				F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */,
 				F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */,
 				F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */,

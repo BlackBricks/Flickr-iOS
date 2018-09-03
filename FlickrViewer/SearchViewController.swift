@@ -15,22 +15,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var photos: [Photo] = []
     private var fetchingMore = false
     private var isRefreshed = false
-    private var searchModeOff = true
     private var currentPage = 1
     private var currentSearch = ""
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    //@IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    let searchController = UISearchController(searchResultsController: nil)
     
     lazy var refresher: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        print("Search MODE in REFRESHER is \(searchModeOff)")
-        if !searchModeOff {
-            refreshControl.addTarget(self, action: #selector(searchRefresh), for: .valueChanged)
-        } else if searchModeOff {
-            refreshControl.addTarget(self, action: #selector(refreshExploreFlickrPhotos), for: .valueChanged)
-        }
+        refreshControl.addTarget(self, action: #selector(refreshExploreFlickrPhotos), for: .valueChanged)
         sizeToArrayCollecting(photos: self.photos)
         return refreshControl
     }()
@@ -41,10 +37,30 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             layout.minimumLineSpacing = 4
             layout.minimumInteritemSpacing = 0
         }
-        
+        //MARK-refresher
         collectionView.refreshControl = refresher
+        
+        //MARK-search controller
+        
+            //search cotroller settings
+            navigationItem.searchController = searchController
+//            searchController.searchBar.delegate = self
+//            let searchBar = searchController.searchBar
+//            searchBar.tintColor = .white
+//            searchBar.placeholder = "Search Flickr"
+            //searchBar.sizeToFit()
+        
+        //searchBarHiding
+        navigationItem.hidesSearchBarWhenScrolling = true
+        
+        //MARK-searchTextColor
+//            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white]
+//            navigationController?.navigationBar.tintColor = .white
+//            navigationController?.navigationBar.barTintColor = UIColor.black
+        
+        //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
-            sizeToArrayCollecting(photos: self.photos)
+            self.sizeToArrayCollecting(photos: self.photos)
             print("POPULAR PHOTOS ADDED")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
@@ -52,23 +68,30 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         activityIndicator.startAnimating()
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchModeOff = true
-        print("Search MODE is \(searchModeOff)")
-        flickrPhotosSearch(searchText: searchBar.text!) {
-            sizeToArrayCollecting(photos: self.photos)
-            print("SEARCH QUERY SUCCESSFULL!")
-            self.collectionView.reloadData()
-            self.activityIndicator.stopAnimating()
-        }
-        activityIndicator.startAnimating()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        navigationItem.hidesSearchBarWhenScrolling = true
+//    }
+    
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        activityIndicator.startAnimating()
+////        flickrPhotosSearch(searchText: searchController.searchBar.text!) {
+////            self.sizeToArrayCollecting(photos: self.photos)
+////            print("SEARCH QUERY SUCCESSFULL!")
+////            self.collectionView.reloadData()
+////            self.activityIndicator.stopAnimating()
+////            self.collectionView.refreshControl = nil
+////        }
+//    }
+//
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        searchBar.setImage(UIImage(named: "glassIcon"), for: UISearchBarIcon.search, state: .normal)
+//    }
     
     @objc private func refreshExploreFlickrPhotos() {
         self.fetchingMore = false
         self.isRefreshed = true
         unfetchedSizes = []
-        //justifiedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
         let flickrUrlString = requestUrl.baseUrl +
@@ -188,68 +211,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
-    @objc private func searchRefresh() {
-        unfetchedSizes = []
-        justifiedSizes = []
-        currentPage = 1
-        let searchText = currentSearch
-        let requestUrl = FlickrURL()
-        let pageNumber: Int = 1
-        let flickrUrlString = requestUrl.baseUrl +
-            requestUrl.searchQuery +
-            requestUrl.apiKey +
-            requestUrl.searchTags +
-            ("\(searchText)") +
-            requestUrl.extras +
-            requestUrl.sort +
-            requestUrl.photosPerPage +
-            requestUrl.page +
-            String(pageNumber) +
-            requestUrl.format
-        print("\(flickrUrlString)")
-        Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
-            guard let photoData = response.data else {
+    var unfetchedSizes: [CGSize] = []
+    var justifiedSizes: [CGSize] = []
+    
+    func sizeToArrayCollecting(photos: [Photo]) {
+        for item in photos {
+            guard let width = Int(item.width_m) else {
                 return
             }
-            let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
-            guard let photoArray = flickrPhotos?.photos.photo else {
-                let error = UIAlertController(
-                    title: "Error", message: "Search query unsuccessfull!", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-                    print("FETCHING ERROR")
-                })
-                error.addAction(ok)
-                self?.present(error, animated: true, completion: nil)
-                self?.activityIndicator.stopAnimating()
+            guard let height = Int(item.height_m) else {
                 return
             }
-            self?.photos = photoArray
-            sizeToArrayCollecting(photos: (self?.photos)!)//force unwrap
-            print("SEARCH QUERY REFRESHED!")
-            self?.collectionView.reloadData()
-            self?.activityIndicator.stopAnimating()
-            self?.refresher.endRefreshing()
+            let size = CGSize(width: width, height: height)
+            unfetchedSizes.append(size)
         }
+        justifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
     }
 }
-
-var unfetchedSizes: [CGSize] = []
-var justifiedSizes: [CGSize] = []
-
-func sizeToArrayCollecting(photos: [Photo]) {
-    for item in photos {
-        guard let width = Int(item.width_m) else {
-            return
-        }
-        guard let height = Int(item.height_m) else {
-            return
-        }
-        let size = CGSize(width: width, height: height)
-        unfetchedSizes.append(size)
-    }
-    justifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
-}
-
 // MARK: UICollectionViewDataSource
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -278,7 +256,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                 isRefreshed = false
                 self.activityIndicator.startAnimating()
                 getExploreFlickrPhotos(pageNumber: currentPage + 1) {
-                    sizeToArrayCollecting(photos: self.photos)
+                    self.sizeToArrayCollecting(photos: self.photos)
                     self.currentPage += 1
                     print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
                     self.fetchingMore = false
