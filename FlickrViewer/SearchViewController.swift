@@ -15,14 +15,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var photos: [Photo] = []
     private var fetchingMore = false
     private var isRefreshed = false
-    private var currentPage = 1
+    private var currentPage = 0
     private var currentSearch = ""
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    //@IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    let searchController = UISearchController(searchResultsController: nil)
     
     lazy var refresher: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -39,55 +36,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
         //MARK-refresher
         collectionView.refreshControl = refresher
-        
-        //MARK-search controller
-        
-            //search cotroller settings
-            navigationItem.searchController = searchController
-//            searchController.searchBar.delegate = self
-//            let searchBar = searchController.searchBar
-//            searchBar.tintColor = .white
-//            searchBar.placeholder = "Search Flickr"
-            //searchBar.sizeToFit()
-        
-        //searchBarHiding
-        navigationItem.hidesSearchBarWhenScrolling = true
-        
-        //MARK-searchTextColor
-//            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white]
-//            navigationController?.navigationBar.tintColor = .white
-//            navigationController?.navigationBar.barTintColor = UIColor.black
-        
+ 
         //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
             self.sizeToArrayCollecting(photos: self.photos)
             print("POPULAR PHOTOS ADDED")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
+            self.currentPage = 1
         }
         activityIndicator.startAnimating()
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        navigationItem.hidesSearchBarWhenScrolling = true
-//    }
-    
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        activityIndicator.startAnimating()
-////        flickrPhotosSearch(searchText: searchController.searchBar.text!) {
-////            self.sizeToArrayCollecting(photos: self.photos)
-////            print("SEARCH QUERY SUCCESSFULL!")
-////            self.collectionView.reloadData()
-////            self.activityIndicator.stopAnimating()
-////            self.collectionView.refreshControl = nil
-////        }
-//    }
-//
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        searchBar.setImage(UIImage(named: "glassIcon"), for: UISearchBarIcon.search, state: .normal)
-//    }
-    
+
     @objc private func refreshExploreFlickrPhotos() {
         self.fetchingMore = false
         self.isRefreshed = true
@@ -215,6 +175,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var justifiedSizes: [CGSize] = []
     
     func sizeToArrayCollecting(photos: [Photo]) {
+        
         for item in photos {
             guard let width = Int(item.width_m) else {
                 return
