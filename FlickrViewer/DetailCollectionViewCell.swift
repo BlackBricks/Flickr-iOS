@@ -13,7 +13,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
     
     
     @IBOutlet weak var currentImage: UIImageView!
-    //let currentImage: UIImageView? = nil
+    
     func setupWithPhoto(flickrPhoto: Photo) {
         currentImage?.sd_setImage(with: flickrPhoto.photoUrl as URL?)
     }

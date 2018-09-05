@@ -1,22 +1,26 @@
 PODS:
   - Alamofire (4.7.2)
+  - PullToRefresher (3.0.2)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
 
 DEPENDENCIES:
   - Alamofire (= 4.7.2)
+  - PullToRefresher
   - SDWebImage (= 4.4.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - PullToRefresher
     - SDWebImage
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  PullToRefresher: 25a367871a70b1da0b28e8e7cecceb4ef04f5f56
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
 
-PODFILE CHECKSUM: 87a99dd3fddf86dfc15bcaa47f753324f3f6d387
+PODFILE CHECKSUM: 3270802b99747ecb6f0265d708429b3f7498c6c2
 
 COCOAPODS: 1.5.3
