@@ -8,15 +8,16 @@
 
 import UIKit
 import Alamofire
-import Lay
+
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
-    private var photos: [Photo] = []
-    private var fetchingMore = false
-    private var isRefreshed = false
+    var photos: [Photo] = []
+    //private var isRefreshed = false//??
+    private var request: DataRequest? = nil
     private var currentPage = 0
     private var currentSearch = ""
+    
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -35,12 +36,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             layout.minimumInteritemSpacing = 0
         }
         //MARK-refresher
-        collectionView.refreshControl = refresher
+        //collectionView.refreshControl = refresher
  
         //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
             self.sizeToArrayCollecting(photos: self.photos)
             print("POPULAR PHOTOS ADDED")
+            print("REQUEST STATUS NOW IS \(self.request?.progress.isFinished)")
             self.collectionView.reloadData()
             self.activityIndicator.stopAnimating()
             self.currentPage = 1
@@ -49,8 +51,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 
     @objc private func refreshExploreFlickrPhotos() {
-        self.fetchingMore = false
-        self.isRefreshed = true
+        
+        //self.isRefreshed = true
         unfetchedSizes = []
         let requestUrl = FlickrURL()
         let pageNumber: Int = 1
@@ -63,7 +65,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             String(pageNumber) +
             requestUrl.format
         print("\(flickrUrlString)")
-        Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+        request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
                 return
             }
@@ -78,13 +80,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 self?.present(error, animated: true, completion: nil)
                 self?.refresher.endRefreshing()
                 self?.activityIndicator.stopAnimating()
-                self?.fetchingMore = false
                 return
             }
             self?.photos = photoArray
             print("POPULAR PHOTOS REFRESHED")
-            self?.fetchingMore = false
-            self?.isRefreshed = false
+            //self?.isRefreshed = false
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
             self?.refresher.endRefreshing()
@@ -92,7 +92,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
-        self.fetchingMore = true
         unfetchedSizes = []
         justifiedSizes = []
         let requestUrl = FlickrURL()
@@ -106,10 +105,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             String(pageNumber) +
             requestUrl.format
         print("\(flickrUrlString)")
-        Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+        
+        request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+            guard response.result.isSuccess else {
+                print("REQUEST ERROR\(String(describing: response.result.error))")
+                return
+            }
             guard let photoData = response.data else {
                 return
             }
+            
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
@@ -121,10 +126,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 self?.present(error, animated: true, completion: nil)
                 self?.refresher.endRefreshing()
                 self?.activityIndicator.stopAnimating()
-                self?.fetchingMore = false
                 return
             }
-            self?.fetchingMore = false
             self?.photos += photoArray
             completion()
         }
@@ -150,10 +153,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             String(pageNumber) +
             requestUrl.format
         print("\(flickrUrlString)")
-        Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+        request =  Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let photoData = response.data else {
                 return
             }
+            
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 let error = UIAlertController(
@@ -169,7 +173,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             self?.photos = photoArray
             completion()
         }
-    }
+      }
     
     var unfetchedSizes: [CGSize] = []
     var justifiedSizes: [CGSize] = []
@@ -211,16 +215,24 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController
+        desVC?.photos = self.photos
+        desVC?.selectedIndex = indexPath
+        desVC?.unfetchedSizes = self.unfetchedSizes
+        self.navigationController?.pushViewController(desVC!, animated: true)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !fetchingMore,!isRefreshed {
+        if (request?.progress.isFinished)! {
             if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
-                isRefreshed = false
+                //isRefreshed = false
                 self.activityIndicator.startAnimating()
                 getExploreFlickrPhotos(pageNumber: currentPage + 1) {
                     self.sizeToArrayCollecting(photos: self.photos)
                     self.currentPage += 1
                     print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
-                    self.fetchingMore = false
                     self.collectionView.reloadData()
                     self.activityIndicator.stopAnimating()
                 }
