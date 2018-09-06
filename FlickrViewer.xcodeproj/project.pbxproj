@@ -11,12 +11,17 @@
 		77B88D91914166F7137F6238 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */; };
 		9149A52856496982593BCB30 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF3F8698139690D8F818D82 /* Pods_FlickrViewer.framework */; };
 		F318A39620EE868500C8A23F /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F318A39520EE868500C8A23F /* SDWebImage.framework */; };
+		F362EB4B213FD637001F59E1 /* Array+Lay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F362EB48213FD637001F59E1 /* Array+Lay.swift */; };
+		F362EB4C213FD637001F59E1 /* UIKitIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F362EB49213FD637001F59E1 /* UIKitIntegration.swift */; };
+		F362EB4D213FD637001F59E1 /* Weighable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F362EB4A213FD637001F59E1 /* Weighable.swift */; };
 		F370EC12212564650068ED7B /* FlickrURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = F370EC11212564650068ED7B /* FlickrURL.swift */; };
+		F39EEF71213E746700052636 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39EEF70213E746700052636 /* DetailViewController.swift */; };
 		F39F9AEC20DAA9CA00BC57B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */; };
 		F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AEF20DAA9CA00BC57B7 /* Main.storyboard */; };
 		F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */; };
 		F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F39F9AF720DAA9CF00BC57B7 /* LaunchScreen.storyboard */; };
 		F3E2A27520F5DD3C0006CDD1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */; };
+		F3E39B6C213E979600FB2AC0 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E39B6B213E979600FB2AC0 /* DetailCollectionViewCell.swift */; };
 		F3FB948620ECBB350073B4C6 /* FlickrPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */; };
 		F3FB948820ECBE450073B4C6 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */; };
 		F3FB948F20ECDDDD0073B4C6 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3FB948E20ECDDDD0073B4C6 /* ImageIO.framework */; };
@@ -29,7 +34,11 @@
 		7AF3F8698139690D8F818D82 /* Pods_FlickrViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlickrViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_FlickrViewer.framework; path = "/Users/stooper/Library/Developer/Xcode/DerivedData/FlickrViewer-cozrsixlysphtsfoxoxkthphzngy/Build/Products/Debug-iphoneos/Pods_FlickrViewer.framework"; sourceTree = "<absolute>"; };
 		F318A39520EE868500C8A23F /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = SDWebImage.framework; path = "/Users/stooper/Library/Developer/Xcode/DerivedData/FlickrViewer-cozrsixlysphtsfoxoxkthphzngy/Build/Products/Debug-iphoneos/SDWebImage.framework"; sourceTree = "<absolute>"; };
+		F362EB48213FD637001F59E1 /* Array+Lay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Lay.swift"; path = "Lay/Array+Lay.swift"; sourceTree = SOURCE_ROOT; };
+		F362EB49213FD637001F59E1 /* UIKitIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIKitIntegration.swift; path = Lay/UIKitIntegration.swift; sourceTree = SOURCE_ROOT; };
+		F362EB4A213FD637001F59E1 /* Weighable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Weighable.swift; path = Lay/Weighable.swift; sourceTree = SOURCE_ROOT; };
 		F370EC11212564650068ED7B /* FlickrURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrURL.swift; sourceTree = "<group>"; };
+		F39EEF70213E746700052636 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		F39F9AE820DAA9CA00BC57B7 /* FlickrViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F39F9AF020DAA9CA00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -37,6 +46,7 @@
 		F39F9AF820DAA9CF00BC57B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F39F9AFA20DAA9CF00BC57B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		F3E39B6B213E979600FB2AC0 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhotos.swift; sourceTree = "<group>"; };
 		F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageCollectionViewCell.swift; path = "/Users/stooper/Flickr-iOS/FlickrViewer/FlickrViewer/ImageCollectionViewCell.swift"; sourceTree = "<absolute>"; };
 		F3FB948E20ECDDDD0073B4C6 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -67,6 +77,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		F362EB45213FD5F8001F59E1 /* Lay */ = {
+			isa = PBXGroup;
+			children = (
+				F362EB48213FD637001F59E1 /* Array+Lay.swift */,
+				F362EB49213FD637001F59E1 /* UIKitIntegration.swift */,
+				F362EB4A213FD637001F59E1 /* Weighable.swift */,
+			);
+			path = Lay;
+			sourceTree = "<group>";
+		};
 		F39F9ADF20DAA9CA00BC57B7 = {
 			isa = PBXGroup;
 			children = (
@@ -88,8 +108,11 @@
 		F39F9AEA20DAA9CA00BC57B7 /* FlickrViewer */ = {
 			isa = PBXGroup;
 			children = (
+				F362EB45213FD5F8001F59E1 /* Lay */,
 				F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */,
 				F3FB948720ECBE450073B4C6 /* ImageCollectionViewCell.swift */,
+				F39EEF70213E746700052636 /* DetailViewController.swift */,
+				F3E39B6B213E979600FB2AC0 /* DetailCollectionViewCell.swift */,
 				F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */,
 				F370EC11212564650068ED7B /* FlickrURL.swift */,
 				F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */,
@@ -190,11 +213,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PullToRefresher/PullToRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PullToRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,9 +252,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F362EB4C213FD637001F59E1 /* UIKitIntegration.swift in Sources */,
+				F3E39B6C213E979600FB2AC0 /* DetailCollectionViewCell.swift in Sources */,
+				F362EB4D213FD637001F59E1 /* Weighable.swift in Sources */,
 				F3FB948820ECBE450073B4C6 /* ImageCollectionViewCell.swift in Sources */,
+				F362EB4B213FD637001F59E1 /* Array+Lay.swift in Sources */,
 				F3E2A27520F5DD3C0006CDD1 /* SearchViewController.swift in Sources */,
 				F3FB948620ECBB350073B4C6 /* FlickrPhotos.swift in Sources */,
+				F39EEF71213E746700052636 /* DetailViewController.swift in Sources */,
 				F39F9AEC20DAA9CA00BC57B7 /* AppDelegate.swift in Sources */,
 				F370EC12212564650068ED7B /* FlickrURL.swift in Sources */,
 			);
@@ -379,6 +409,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4283R63P3;
 				INFOPLIST_FILE = FlickrViewer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -399,6 +430,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4283R63P3;
 				INFOPLIST_FILE = FlickrViewer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
