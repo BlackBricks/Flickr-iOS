@@ -98,49 +98,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-    private func flickrPhotosSearch(searchText: String, completion: @escaping () -> ()) {
-        currentPage = 1
-        currentSearch = searchText
-        print("Current SEARCH is \(currentSearch)")
-        let requestUrl = FlickrURL()
-        let pageNumber: Int = 1
-        let flickrUrlString = requestUrl.baseUrl +
-                requestUrl.searchQuery +
-                requestUrl.apiKey +
-                requestUrl.searchTags +
-                ("\(searchText)") +
-                requestUrl.extras +
-                requestUrl.sort +
-                requestUrl.photosPerPage +
-                requestUrl.page +
-                String(pageNumber) +
-                requestUrl.format
-        print("\(flickrUrlString)")
-        request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
-            guard let photoData = response.data else {
-                return
-            }
-
-            let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
-            guard let photoArray = flickrPhotos?.photos.photo else {
-                let error = UIAlertController(
-                        title: "Error", message: "Search query unsuccessfull!", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-                    print("FETCHING ERROR")
-                })
-                error.addAction(ok)
-                self?.present(error, animated: true, completion: nil)
-                self?.activityIndicator.stopAnimating()
-                return
-            }
-            self?.photos = photoArray
-            completion()
-        }
-    }
-
-    
-
-    func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
+    private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
         var unfetchedSizes: [CGSize] = []
         for item in photos {
             guard let width = Int(item.width_m) else {
@@ -181,15 +139,19 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController
-        desVC?.photos = self.photos
-        desVC?.selectedIndex = indexPath
-
-        self.navigationController?.pushViewController(desVC!, animated: true)
+        guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
+            return
+        }
+        desVC.photos = self.photos
+        desVC.selectedIndex = indexPath
+        self.navigationController?.pushViewController(desVC, animated: true)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (request?.progress.isFinished)! {
+        guard let requestIsFinished = request?.progress.isFinished else {
+            return
+        }
+        if requestIsFinished {
             if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
                 self.activityIndicator.startAnimating()
                 getExploreFlickrPhotos(pageNumber: currentPage + 1) {
