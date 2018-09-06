@@ -78,15 +78,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
-                let error = UIAlertController(
-                        title: "Error", message: "Explore photos not set", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-                    print("FETCHING ERROR")
-                })
-                error.addAction(ok)
-                self?.present(error, animated: true, completion: nil)
-                self?.collectionView.endAllRefreshing()
-                self?.activityIndicator.stopAnimating()
+                self?.ShowErrorMessage()
                 return
             }
             if self?.photos.count == 0 {
@@ -97,6 +89,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             completion()
         }
     }
+    
+    private func ShowErrorMessage(){
+        let error = UIAlertController(
+            title: "Error", message: "Explore photos not set", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            print("FETCHING ERROR")
+        })
+        error.addAction(ok)
+        self.present(error, animated: true, completion: nil)
+        self.collectionView.endAllRefreshing()
+        self.activityIndicator.stopAnimating()
+	    }
 
     private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
         var unfetchedSizes: [CGSize] = []
