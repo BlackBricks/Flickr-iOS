@@ -16,15 +16,29 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var justifiedSizes: [CGSize] = []
     private var request: DataRequest? = nil
     private var currentPage = 0
-    private var currentSearch = ""
+    private var currentSearch: String? = nil
     
-
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var glassIcon: UIImageView!
+    @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
-
+    
+    @IBAction func cancelTapped(_ sender: UIButton) {
+        glassIcon.tintColor = UIColor.gray
+        searchField.text = ""
+        searchField.resignFirstResponder()
+        cancelButton.layer.borderWidth = 0
+        cancelButton.titleLabel?.textColor = UIColor.darkGray
+        cancelButton.layer.borderColor = UIColor.darkGray.cgColor
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        activityIndicator.startAnimating()
+        collectionView.contentInset.top = 60
+        searchTextInput(searchField)
+
         //MARK-layout settings
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 4
@@ -52,10 +66,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             self.activityIndicator.stopAnimating()
             self.currentPage = 1
         }
-        activityIndicator.startAnimating()
     }
-
+    
+    //MARK - Explore photos requesting
     private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
+        self.activityIndicator.startAnimating()
         let requestUrl = FlickrURL()
         let pageNumber: Int = pageNumber
         let flickrUrlString = requestUrl.baseUrl +
@@ -90,6 +105,48 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
+    //MARK - Search requesting
+    func searchTextInput(_ textField: UITextField){
+        searchField.delegate = self
+    }
+    
+    private func flickrPhotosSearch(searchText: String, pageNumber: Int, completion: @escaping () -> ()) {
+        self.currentPage = pageNumber
+        currentSearch = searchText
+        print("Current SEARCH is \(String(describing: currentSearch))")
+        let requestUrl = FlickrURL()
+        let flickrUrlString = requestUrl.baseUrl +
+            requestUrl.searchQuery +
+            requestUrl.apiKey +
+            requestUrl.searchTags +
+            ("\(searchText)") +
+            requestUrl.extras +
+            requestUrl.sort +
+            requestUrl.photosPerPage +
+            requestUrl.page +
+            String(pageNumber) +
+            requestUrl.format
+        print("\(flickrUrlString)")
+        request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+            guard let photoData = response.data else {
+                return
+            }
+            
+            let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
+            guard let photoArray = flickrPhotos?.photos.photo else {
+                self?.ShowErrorMessage()
+                return
+            }
+            if self?.photos.count == 0 {
+                self?.photos = photoArray
+            } else {
+                self?.photos += photoArray
+            }
+            completion()
+        }
+    }
+    
+    //Mark - Error Message
     private func ShowErrorMessage() {
         let error = UIAlertController(
             title: "Error",
@@ -104,7 +161,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         self.collectionView.endAllRefreshing()
         self.activityIndicator.stopAnimating()
     }
-
+    
+    //MARK - Justified Layout Calculation
     private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
         var unfetchedSizes: [CGSize] = []
         for item in photos {
@@ -151,6 +209,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         desVC.photos = self.photos
         desVC.selectedIndex = indexPath
+        desVC.justifiedSizes = self.justifiedSizes
         self.navigationController?.pushViewController(desVC, animated: true)
     }
 
@@ -161,6 +220,16 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         if requestIsFinished {
             if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
                 self.activityIndicator.startAnimating()
+                if currentSearch != nil, requestIsFinished {
+                    print("Loading next page. Current page now is \(currentPage)")
+                    flickrPhotosSearch(searchText: currentSearch!, pageNumber: currentPage + 1) {
+                    self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
+                    self.collectionView.reloadData()
+                    print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
+                    print("\(self.justifiedSizes.count) PHOTOS SEARCHED")
+                    self.activityIndicator.stopAnimating()
+                    }
+                } else {
                 getExploreFlickrPhotos(pageNumber: currentPage + 1) {
                     self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
                     self.currentPage += 1
@@ -168,8 +237,37 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                     print("PHOTOS ARRAY COUNT IS \(self.justifiedSizes.count)")
                     self.collectionView.reloadData()
                     self.activityIndicator.stopAnimating()
+                    }
                 }
             }
+        }
+    }
+}
+extension SearchViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        searchField.returnKeyType = UIReturnKeyType.search
+        glassIcon.tintColor = UIColor.white
+        cancelButton.layer.borderWidth = 2
+        cancelButton.titleLabel?.textColor = UIColor.white
+        cancelButton.layer.borderColor = UIColor.white.cgColor
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard searchField.text != "" else {
+            return
+        }
+        self.photos = []
+        flickrPhotosSearch(searchText: searchField.text!, pageNumber: 1) {
+            self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
+            self.collectionView.reloadData()
+            print("\(self.justifiedSizes.count) PHOTOS SEARCHED")
+            self.activityIndicator.stopAnimating()
         }
     }
 }

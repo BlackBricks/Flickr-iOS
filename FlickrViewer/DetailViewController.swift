@@ -14,8 +14,8 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     var photos: [Photo] = []
+    var justifiedSizes: [CGSize] = []
     var selectedIndex: IndexPath? = nil
-    var unfetchedSizes: [CGSize] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +41,9 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard unfetchedSizes.count != 0 else {
+        guard justifiedSizes.count != 0 else {
             return CGSize(width: 0.5, height: 0.5)
         }
-        return unfetchedSizes[indexPath.item]
+        return justifiedSizes[indexPath.item]
     }
 }
