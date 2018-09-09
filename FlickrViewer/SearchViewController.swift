@@ -36,7 +36,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        collectionView.contentInset.top = 60
+        collectionView.contentInset.top = 58
         searchTextInput(searchField)
 
         //MARK-layout settings
@@ -166,10 +166,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
         var unfetchedSizes: [CGSize] = []
         for item in photos {
-            guard let width = Int(item.width_m) else {
-                return []
-            }
-            guard let height = Int(item.height_m) else {
+            guard
+                let width = Int(item.width_m),
+                let height = Int(item.height_m) else {
                 return []
             }
             let size = CGSize(width: width, height: height)
@@ -209,7 +208,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         desVC.photos = self.photos
         desVC.selectedIndex = indexPath
-        desVC.justifiedSizes = self.justifiedSizes
+        
         self.navigationController?.pushViewController(desVC, animated: true)
     }
 
