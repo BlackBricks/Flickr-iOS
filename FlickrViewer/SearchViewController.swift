@@ -15,7 +15,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var photos: [Photo] = []
     private var justifiedSizes: [CGSize] = []
     private var request: DataRequest? = nil
-    private var currentPage = 0
+    private var currentLoadedPage = 0
     private var currentSearch: String? = nil
     
     @IBOutlet weak var cancelButton: UIButton!
@@ -64,7 +64,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             self.collectionView.reloadData()
             print("\(self.justifiedSizes.count) POPULAR PHOTOS ADDED")
             self.activityIndicator.stopAnimating()
-            self.currentPage = 1
+            self.currentLoadedPage = 1
         }
     }
     
@@ -111,7 +111,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func flickrPhotosSearch(searchText: String, pageNumber: Int, completion: @escaping () -> ()) {
-        self.currentPage = pageNumber
+        //self.currentLoadedPage = pageNumber//??
         currentSearch = searchText
         print("Current SEARCH is \(String(describing: currentSearch))")
         let requestUrl = FlickrURL()
@@ -142,6 +142,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             } else {
                 self?.photos += photoArray
             }
+            self?.currentLoadedPage = pageNumber
             completion()
         }
     }
@@ -213,26 +214,29 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let requestIsFinished = request?.progress.isFinished else {
+        guard
+            let requestIsFinished = request?.progress.isFinished,
+            !requestIsFinished
+            else {
             return
         }
         if requestIsFinished {
             if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
                 self.activityIndicator.startAnimating()
-                if currentSearch != nil, requestIsFinished {
-                    print("Loading next page. Current page now is \(currentPage)")
-                    flickrPhotosSearch(searchText: currentSearch!, pageNumber: currentPage + 1) {
-                    self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
-                    self.collectionView.reloadData()
-                    print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
-                    print("\(self.justifiedSizes.count) PHOTOS SEARCHED")
-                    self.activityIndicator.stopAnimating()
+                if currentSearch != nil{
+                    print("Loading next page. Current page now is \(currentLoadedPage)")
+                    flickrPhotosSearch(searchText: currentSearch!, pageNumber: currentLoadedPage + 1){
+                        self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
+                        self.collectionView.reloadData()
+                        print("One more page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
+                        print("\(self.justifiedSizes.count) PHOTOS SEARCHED")
+                        self.activityIndicator.stopAnimating()
                     }
                 } else {
-                getExploreFlickrPhotos(pageNumber: currentPage + 1) {
+                getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
                     self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
-                    self.currentPage += 1
-                    print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
+                    self.currentLoadedPage += 1
+                    print("One more page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
                     print("PHOTOS ARRAY COUNT IS \(self.justifiedSizes.count)")
                     self.collectionView.reloadData()
                     self.activityIndicator.stopAnimating()

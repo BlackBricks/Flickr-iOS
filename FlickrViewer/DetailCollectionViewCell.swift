@@ -15,6 +15,8 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     @IBOutlet weak var currentImage: UIImageView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
+    @IBOutlet weak var detailViewClosing: UIButton!
+    
     
     var definedSize: CGSize?
     
