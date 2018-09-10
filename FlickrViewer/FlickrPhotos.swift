@@ -29,6 +29,10 @@ struct Photo: Codable {
         return NSURL(string: "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_m.jpg")!
     }
     
+    func photoSizeValidate(){
+        
+    }
+    
     func size() -> CGSize {
         guard
             let width = Int(width_m),

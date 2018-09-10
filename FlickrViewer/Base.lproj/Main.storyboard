@@ -14,7 +14,7 @@
         <!--Search View Controller-->
         <scene sceneID="hOw-5b-t0G">
             <objects>
-                <viewController id="vWL-67-Ln9" customClass="SearchViewController" customModule="FlickrViewer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchViewController" id="vWL-67-Ln9" customClass="SearchViewController" customModule="FlickrViewer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleAspectFit" id="xgq-6c-Oh7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -189,6 +189,9 @@
                                                             <state key="normal" title="X">
                                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="detailViewClosing:" destination="ssz-MU-H8n" eventType="touchUpInside" id="wAP-TQ-6eA"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -220,7 +223,6 @@
                                         <connections>
                                             <outlet property="bottomView" destination="p4R-16-rEI" id="cKM-Im-AeW"/>
                                             <outlet property="currentImage" destination="dih-ll-m3t" id="W7u-6B-fIg"/>
-                                            <outlet property="detailViewClosing" destination="x7R-tl-rMw" id="uWq-bL-ypq"/>
                                             <outlet property="scrollView" destination="Ygl-fj-akg" id="ilY-BB-0zi"/>
                                             <outlet property="topView" destination="htp-fB-eRo" id="Cc9-Ci-IiC"/>
                                         </connections>

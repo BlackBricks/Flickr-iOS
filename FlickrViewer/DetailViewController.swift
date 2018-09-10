@@ -10,8 +10,12 @@ import UIKit
 import SDWebImage
 
 
-class DetailViewController: UIViewController {
-
+class DetailViewController: UIViewController, DetailViewCellDelegate {
+    func close() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+        
     @IBOutlet weak var collectionView: UICollectionView!
     var photos: [Photo] = []
     
