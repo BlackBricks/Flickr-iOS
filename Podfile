@@ -6,7 +6,7 @@ target 'FlickrViewer' do
   use_frameworks!
 
   # Pods for FlickrViewer
-pod 'SDWebImage','4.4.1'
+pod 'SDWebImage', '4.4.1'
 pod 'Alamofire', '4.7.2'
 pod 'PullToRefresher', '3.0.2'
 

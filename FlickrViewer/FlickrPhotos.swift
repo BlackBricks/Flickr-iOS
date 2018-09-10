@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct FlickrPhotos: Codable {
     let photos: FlickrPhoto
@@ -27,5 +28,16 @@ struct Photo: Codable {
     var photoUrl: NSURL {
         return NSURL(string: "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_m.jpg")!
     }
+    
+    func size() -> CGSize {
+        guard
+            let width = Int(width_m),
+            let height = Int(height_m) else {
+                return CGSize.zero
+        }
+        return CGSize(width: width, height: height)
+    }
 }
+
+
 

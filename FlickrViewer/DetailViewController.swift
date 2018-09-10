@@ -14,8 +14,8 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     var photos: [Photo] = []
+    
     var selectedIndex: IndexPath? = nil
-    var unfetchedSizes: [CGSize] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +24,10 @@ class DetailViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         collectionView.scrollToItem(at: selectedIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        collectionView.reloadData()
     }
 }
 
@@ -41,9 +45,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard unfetchedSizes.count != 0 else {
-            return CGSize(width: 0.5, height: 0.5)
-        }
-        return unfetchedSizes[indexPath.item]
+        
+        return collectionView.frame.size
     }
 }

@@ -15,16 +15,30 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private var photos: [Photo] = []
     private var justifiedSizes: [CGSize] = []
     private var request: DataRequest? = nil
-    private var currentPage = 0
-    private var currentSearch = ""
-    
+    private var currentLoadedPage = 0
+    private var currentSearch: String? = nil
 
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var glassIcon: UIImageView!
+    @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
 
+    @IBAction func cancelTapped(_ sender: UIButton) {
+        glassIcon.tintColor = UIColor.gray
+        searchField.text = ""
+        searchField.resignFirstResponder()
+        cancelButton.layer.borderWidth = 0
+        cancelButton.titleLabel?.textColor = UIColor.darkGray
+        cancelButton.layer.borderColor = UIColor.darkGray.cgColor
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        activityIndicator.startAnimating()
+        collectionView.contentInset.top = 40
+        searchTextInput(searchField)
+
         //MARK-layout settings
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 4
@@ -35,38 +49,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.addPullToRefresh(refresher) {
             self.photos = []
             self.getExploreFlickrPhotos(pageNumber: 1) {
-                self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
-                print("PHOTOS ARRAY COUNT IS \(self.justifiedSizes.count)")
-                self.collectionView.reloadData()
                 print("POPULAR PHOTOS REFRESHED")
-                self.activityIndicator.stopAnimating()
-                self.collectionView.endAllRefreshing()
+                self.currentLoadedPage = 1
             }
         }
 
         //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
-            self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
-            self.collectionView.reloadData()
-            print("\(self.justifiedSizes.count) POPULAR PHOTOS ADDED")
-            self.activityIndicator.stopAnimating()
-            self.currentPage = 1
+            self.currentLoadedPage = 1
         }
-        activityIndicator.startAnimating()
     }
 
-    private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
-        let requestUrl = FlickrURL()
-        let pageNumber: Int = pageNumber
-        let flickrUrlString = requestUrl.baseUrl +
-                requestUrl.popularPhotosQuery +
-                requestUrl.apiKey +
-                requestUrl.extras +
-                requestUrl.recentPhotosPerPage +
-                requestUrl.page +
-                String(pageNumber) +
-                requestUrl.format
-
+    private func requestAndParse(flickrUrlString: String) {
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard response.result.isSuccess else {
                 print("REQUEST ERROR\(String(describing: response.result.error))")
@@ -75,7 +69,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             guard let photoData = response.data else {
                 return
             }
-
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
             guard let photoArray = flickrPhotos?.photos.photo else {
                 self?.ShowErrorMessage()
@@ -86,15 +79,68 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             } else {
                 self?.photos += photoArray
             }
-            completion()
+            guard let allPhotos = self?.photos,
+                  let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: allPhotos) else {
+                return
+            }
+            self?.justifiedSizes = justifiedLayoutPics
+            print("PHOTOS ARRAY COUNT IS \(String(describing: self?.justifiedSizes.count))")
+            self?.collectionView.reloadData()
+            self?.activityIndicator.stopAnimating()
+            self?.collectionView.endAllRefreshing()
         }
     }
-    
+
+    //MARK - Explore photos requesting
+    private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
+        self.activityIndicator.startAnimating()
+        
+        let requestUrl = FlickrURL()
+        let flickrUrlString = requestUrl.baseUrl +
+        requestUrl.popularPhotosQuery +
+        requestUrl.apiKey +
+        requestUrl.extras +
+        requestUrl.recentPhotosPerPage +
+        requestUrl.page +
+        String(pageNumber) +
+        requestUrl.format
+        requestAndParse(flickrUrlString: flickrUrlString)
+        completion()
+    }
+
+    //MARK - Search requesting
+    func searchTextInput(_ textField: UITextField) {
+        searchField.delegate = self
+    }
+
+    private func flickrPhotosSearch(searchText: String, pageNumber: Int, completion: @escaping () -> ()) {
+        currentSearch = searchText
+        print("Current SEARCH is \(String(describing: currentSearch))")
+        
+        let requestUrl = FlickrURL()
+        let flickrUrlString = requestUrl.baseUrl +
+        requestUrl.searchQuery +
+        requestUrl.apiKey +
+        requestUrl.searchTags +
+        ("\(searchText)") +
+        requestUrl.extras +
+        requestUrl.sort +
+        requestUrl.photosPerPage +
+        requestUrl.page +
+        String(pageNumber) +
+        requestUrl.format
+        
+        requestAndParse(flickrUrlString: flickrUrlString)
+        self.currentLoadedPage = pageNumber
+        completion()
+    }
+
+    //Mark - Error Message
     private func ShowErrorMessage() {
         let error = UIAlertController(
-            title: "Error",
-            message: "Explore photos not set",
-            preferredStyle: .alert
+                title: "Error",
+                message: "Explore photos not set",
+                preferredStyle: .alert
         )
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             print("FETCHING ERROR")
@@ -105,13 +151,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         self.activityIndicator.stopAnimating()
     }
 
-    private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize]{
+    //MARK - Justified Layout Calculation
+    private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize] {
         var unfetchedSizes: [CGSize] = []
         for item in photos {
-            guard let width = Int(item.width_m) else {
-                return []
-            }
-            guard let height = Int(item.height_m) else {
+            guard
+                    let width = Int(item.width_m),
+                    let height = Int(item.height_m) else {
                 return []
             }
             let size = CGSize(width: width, height: height)
@@ -155,21 +201,48 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let requestIsFinished = request?.progress.isFinished else {
+        guard let requestIsFinished = request?.progress.isFinished,
+              requestIsFinished else {
             return
         }
-        if requestIsFinished {
-            if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
-                self.activityIndicator.startAnimating()
-                getExploreFlickrPhotos(pageNumber: currentPage + 1) {
-                    self.justifiedSizes = self.calculateJustifiedSizes(photos: self.photos)
-                    self.currentPage += 1
-                    print("One more page loaded. CURRENT PAGE IS \(self.currentPage)")
-                    print("PHOTOS ARRAY COUNT IS \(self.justifiedSizes.count)")
-                    self.collectionView.reloadData()
-                    self.activityIndicator.stopAnimating()
+        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
+            self.activityIndicator.startAnimating()
+            guard let searchTag = currentSearch else {
+                getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
+                    self.currentLoadedPage += 1
+                    print("One more explore page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
                 }
+                return
             }
+            print("Loading next page. Current page now is \(currentLoadedPage)")
+            flickrPhotosSearch(searchText: searchTag, pageNumber: currentLoadedPage + 1) {
+                print("One more search page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
+            }
+        }
+    }
+}
+
+extension SearchViewController: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        searchField.returnKeyType = UIReturnKeyType.search
+        glassIcon.tintColor = UIColor.white
+        cancelButton.layer.borderWidth = 2
+        cancelButton.titleLabel?.textColor = UIColor.white
+        cancelButton.layer.borderColor = UIColor.white.cgColor
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let searchTag = searchField.text else {
+            return
+        }
+        self.photos = []
+        flickrPhotosSearch(searchText: searchTag, pageNumber: 1) {
         }
     }
 }
