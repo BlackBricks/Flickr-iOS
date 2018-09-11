@@ -23,6 +23,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchViewTopConstraint: NSLayoutConstraint!
+
+
+    @IBOutlet weak var searchView: UIView!
 
     @IBAction func cancelTapped(_ sender: UIButton) {
         glassIcon.tintColor = UIColor.gray
@@ -38,7 +42,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         activityIndicator.startAnimating()
         collectionView.contentInset.top = 60
         searchTextInput(searchField)
-        
 
         //MARK-layout settings
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -75,9 +78,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 self?.ShowErrorMessage()
                 return
             }
-            
-            let validatedArray = photoArray.filter{$0.isPhotoSizeValid()}
-            
+
+            let validatedArray = photoArray.filter {
+                $0.isPhotoSizeValid()
+            }
+
             if self?.photos.count == 0 {
                 self?.photos = validatedArray
             } else {
@@ -98,7 +103,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     //MARK - Explore photos requesting
     private func getExploreFlickrPhotos(pageNumber: Int, completion: @escaping () -> ()) {
         self.activityIndicator.startAnimating()
-        
+
         let requestUrl = FlickrURL()
         let flickrUrlString = requestUrl.baseUrl +
         requestUrl.popularPhotosQuery +
@@ -120,7 +125,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     private func flickrPhotosSearch(searchText: String, pageNumber: Int, completion: @escaping () -> ()) {
         currentSearch = searchText
         print("Current SEARCH is \(String(describing: currentSearch))")
-        
+
         let requestUrl = FlickrURL()
         let flickrUrlString = requestUrl.baseUrl +
         requestUrl.searchQuery +
@@ -133,7 +138,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         requestUrl.page +
         String(pageNumber) +
         requestUrl.format
-        
+
         requestAndParse(flickrUrlString: flickrUrlString)
         self.currentLoadedPage = pageNumber
         completion()
@@ -205,6 +210,19 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        print("GESTURE_COORDINATE =\(scrollView.panGestureRecognizer.translation(in: scrollView.superview).y)")
+        print("TopConstraint = \(searchViewTopConstraint.constant)")
+        if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < 0, searchViewTopConstraint.constant >= -80 {
+            searchViewTopConstraint.constant = scrollView.panGestureRecognizer.translation(in: scrollView.superview).y
+            self.collectionView.contentInset.top = 0
+        } else {
+            if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0, searchViewTopConstraint.constant <= -5 {
+                searchViewTopConstraint.constant += 5
+                self.collectionView.contentInset.top = 56
+            }
+        }
+
         guard let requestIsFinished = request?.progress.isFinished,
               requestIsFinished else {
             return
