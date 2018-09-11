@@ -11,27 +11,29 @@ import SDWebImage
 
 
 class DetailViewController: UIViewController, DetailViewCellDelegate {
-    func close() {
-        dismiss(animated: true, completion: nil)
-    }
     
-        
     @IBOutlet weak var collectionView: UICollectionView!
-    var photos: [Photo] = []
     
+    var photos: [Photo] = []
     var selectedIndex: IndexPath? = nil
+    var detailDelegate: DetailViewCellDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
     }
+    
     override func viewWillAppear(_ animated: Bool) {
-        collectionView.scrollToItem(at: selectedIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-        
+        collectionView.scrollToItem(at: selectedIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         collectionView.reloadData()
+    }
+    
+    func close() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -45,11 +47,11 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
             return UICollectionViewCell()
         }
         cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+        cell.detailDelegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         return collectionView.frame.size
     }
 }

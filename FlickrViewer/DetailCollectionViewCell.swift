@@ -21,7 +21,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     @IBOutlet weak var bottomView: UIView!
     
     @IBAction func detailViewClosing(_ sender: UIButton) {
-        print ("Button tapped")
         detailDelegate?.close()
     }
     var detailDelegate: DetailViewCellDelegate?
@@ -30,7 +29,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         self.addGestureRecognizer(tapRecognizer)
         scrollView.minimumZoomScale = 1.0
