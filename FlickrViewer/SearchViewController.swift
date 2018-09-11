@@ -75,14 +75,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 self?.ShowErrorMessage()
                 return
             }
-            var validatedArray: [Photo] = []
-            for item in photoArray {
-                guard
-                    item.photoSizeValidate() else {
-                        return
-                }
-                validatedArray.append(item)
-            }
+            
+            let validatedArray = photoArray.filter{$0.isPhotoSizeValid()}
             
             if self?.photos.count == 0 {
                 self?.photos = validatedArray
