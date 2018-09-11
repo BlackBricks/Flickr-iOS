@@ -36,8 +36,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        collectionView.contentInset.top = 40
+        collectionView.contentInset.top = 60
         searchTextInput(searchField)
+        
 
         //MARK-layout settings
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -74,10 +75,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 self?.ShowErrorMessage()
                 return
             }
+            
+            let validatedArray = photoArray.filter{$0.isPhotoSizeValid()}
+            
             if self?.photos.count == 0 {
-                self?.photos = photoArray
+                self?.photos = validatedArray
             } else {
-                self?.photos += photoArray
+                self?.photos += validatedArray
             }
             guard let allPhotos = self?.photos,
                   let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: allPhotos) else {
@@ -197,7 +201,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         desVC.photos = self.photos
         desVC.selectedIndex = indexPath
-        self.navigationController?.pushViewController(desVC, animated: true)
+        show(desVC, sender: nil)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -238,7 +242,7 @@ extension SearchViewController: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let searchTag = searchField.text else {
+        guard let searchTag = searchField.text, searchTag != "" else {
             return
         }
         self.photos = []

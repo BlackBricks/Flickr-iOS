@@ -9,20 +9,26 @@
 import UIKit
 import SDWebImage
 
+protocol DetailViewCellDelegate {
+    func close()
+}
+
 class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var currentImage: UIImageView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
-    @IBOutlet weak var detailViewClosing: UIButton!
     
+    @IBAction func detailViewClosing(_ sender: UIButton) {
+        detailDelegate?.close()
+    }
+    var detailDelegate: DetailViewCellDelegate?
     
     var definedSize: CGSize?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         self.addGestureRecognizer(tapRecognizer)
         scrollView.minimumZoomScale = 1.0
