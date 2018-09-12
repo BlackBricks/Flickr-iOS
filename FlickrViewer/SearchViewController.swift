@@ -262,6 +262,7 @@ extension SearchViewController: UITextFieldDelegate {
         searchField.returnKeyType = UIReturnKeyType.search
         glassIcon.tintColor = UIColor.white
         cancelButton.alpha = 1
+        
         cancelButton.layer.borderWidth = 2
         cancelButton.titleLabel?.textColor = UIColor.white
         cancelButton.layer.borderColor = UIColor.white.cgColor
@@ -301,7 +302,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         recentSearches.remove(at: index.row)
         self.recentSearchesTableView.reloadData()
     }
-     
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
