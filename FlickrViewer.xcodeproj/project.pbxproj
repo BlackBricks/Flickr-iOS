@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0E8601292148D89500F15102 /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */; };
+		0E97290F214A624400A36795 /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */; };
+		0E972911214A63E900A36795 /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E972910214A63E500A36795 /* ProximaNova-Light.ttf */; };
 		0EEB47862147792C00863FAD /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEB47852147792C00863FAD /* ImageCollectionViewCell.swift */; };
 		157C24DAF114B48478C9E253 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 769225049BB125FF5590F509 /* Pods_FlickrViewer.framework */; };
 		77B88D91914166F7137F6238 /* Pods_FlickrViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862D2CC7AB6B63CF6AC9583B /* Pods_FlickrViewer.framework */; };
@@ -30,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableViewCell.swift; sourceTree = "<group>"; };
+		0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Black.ttf"; sourceTree = "<group>"; };
+		0E972910214A63E500A36795 /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Light.ttf"; sourceTree = "<group>"; };
 		0EEB47852147792C00863FAD /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		3B1D3EB03820EE7C864F22C4 /* Pods-FlickrViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlickrViewer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer.debug.xcconfig"; sourceTree = "<group>"; };
 		4A90DCCD06A79A1E51C801D6 /* Pods-FlickrViewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlickrViewer.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlickrViewer/Pods-FlickrViewer.release.xcconfig"; sourceTree = "<group>"; };
@@ -70,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E97290D214A621200A36795 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */,
+				0E972910214A63E500A36795 /* ProximaNova-Light.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		6B6CFC81F985C551CD55501F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +123,7 @@
 		F39F9AEA20DAA9CA00BC57B7 /* FlickrViewer */ = {
 			isa = PBXGroup;
 			children = (
+				0E97290D214A621200A36795 /* Fonts */,
 				F362EB45213FD5F8001F59E1 /* Lay */,
 				F3E2A27420F5DD3C0006CDD1 /* SearchViewController.swift */,
 				0EEB47852147792C00863FAD /* ImageCollectionViewCell.swift */,
@@ -199,9 +213,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E972911214A63E900A36795 /* ProximaNova-Light.ttf in Resources */,
 				F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */,
 				F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */,
 				F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */,
+				0E97290F214A624400A36795 /* ProximaNova-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

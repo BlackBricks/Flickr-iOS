@@ -223,7 +223,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         let scrollViewVerticalValue: CGFloat = -60
         let searchViewTopConstraintMaxValue: CGFloat = -80
         let searchViewTopConstraintMinValue: CGFloat = -5
-        let searchViewTopConstraintVelocity: CGFloat = -5
+        let searchViewTopConstraintVelocity: CGFloat = 5
         
         if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < scrollViewVerticalValue, searchViewTopConstraint.constant >= searchViewTopConstraintMaxValue {
             searchViewTopConstraint.constant = scrollView.panGestureRecognizer.translation(in: scrollView.superview).y

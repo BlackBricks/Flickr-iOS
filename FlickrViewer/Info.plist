@@ -61,5 +61,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ProximaNova-Black.ttf</string>
+		<string>ProximaNova-Light.ttf</string>
+	</array>
 </dict>
 </plist>
