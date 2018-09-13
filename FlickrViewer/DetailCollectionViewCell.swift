@@ -17,8 +17,15 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var currentImage: UIImageView!
+    
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var avatar: UIImageView!
+    @IBOutlet weak var usernameLabel: UILabel!
+    
     @IBOutlet weak var bottomView: UIView!
+    @IBOutlet weak var photoTitle: UILabel!
+    @IBOutlet weak var countViews: UILabel!
+    
     
     @IBAction func detailViewClosing(_ sender: UIButton) {
         detailDelegate?.close()
@@ -49,7 +56,14 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         return currentImage
     }
     
-    func setupWithPhoto(flickrPhoto: Photo) {
+    func detailViewContentSet(flickrPhoto: Photo){
+        avatar.sd_setImage(with: flickrPhoto.avatarURL as URL?)
+        print ("\(flickrPhoto.avatarURL)")
+        usernameLabel.text = flickrPhoto.ownername
+        
+        photoTitle.text = flickrPhoto.title
+        countViews.text = "Views \(flickrPhoto.views)"
+        
         let width = flickrPhoto.size().width
         let height = flickrPhoto.size().height
         let aspectRatio = width/height

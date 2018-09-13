@@ -46,7 +46,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCollectionViewCell", for: indexPath) as? DetailCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+        cell.detailViewContentSet(flickrPhoto: photos[indexPath.row])
         cell.detailDelegate = self
         return cell
     }

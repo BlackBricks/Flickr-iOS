@@ -264,8 +264,19 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htp-fB-eRo">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                                     <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XxI-o6-fig">
+                                                            <rect key="frame" x="15" y="0.0" width="66" height="62"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-oz-4Kq">
+                                                            <rect key="frame" x="95" y="16" width="224" height="29"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="18"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x7R-tl-rMw">
-                                                            <rect key="frame" x="329" y="19" width="30" height="36"/>
+                                                            <rect key="frame" x="327" y="13" width="30" height="36"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                             <state key="normal" title="X">
@@ -283,6 +294,22 @@
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p4R-16-rEI">
                                                     <rect key="frame" x="0.0" y="578" width="375" height="70"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6O-dS-ki6">
+                                                            <rect key="frame" x="8" y="4" width="359" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEI-tG-a45">
+                                                            <rect key="frame" x="8" y="33" width="359" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="70" id="hC8-XS-jgZ"/>
@@ -303,10 +330,14 @@
                                             <constraint firstItem="htp-fB-eRo" firstAttribute="leading" secondItem="ssz-MU-H8n" secondAttribute="leading" id="tLe-t4-ZwW"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="avatar" destination="XxI-o6-fig" id="vJ8-K7-Qfv"/>
                                             <outlet property="bottomView" destination="p4R-16-rEI" id="cKM-Im-AeW"/>
+                                            <outlet property="countViews" destination="pEI-tG-a45" id="GAL-5I-Ka6"/>
                                             <outlet property="currentImage" destination="dih-ll-m3t" id="W7u-6B-fIg"/>
+                                            <outlet property="photoTitle" destination="n6O-dS-ki6" id="yOc-Zj-msZ"/>
                                             <outlet property="scrollView" destination="Ygl-fj-akg" id="ilY-BB-0zi"/>
                                             <outlet property="topView" destination="htp-fB-eRo" id="Cc9-Ci-IiC"/>
+                                            <outlet property="usernameLabel" destination="Lcw-oz-4Kq" id="1V7-54-s4c"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

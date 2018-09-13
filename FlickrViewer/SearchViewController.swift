@@ -38,9 +38,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         searchField.text = ""
         searchField.resignFirstResponder()
         cancelButton.alpha = 0
-//        cancelButton.layer.borderWidth = 0
-//        cancelButton.titleLabel?.textColor = UIColor.darkGray
-//        cancelButton.layer.borderColor = UIColor.darkGray.cgColor
         recentSearchesTableView.isHidden = true
     }
 
@@ -219,17 +216,20 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
         recentSearchesTableView.isHidden = true
+        
         //MARK - Search Bar Scroll Hiding
-        print("GESTURE_COORDINATE =\(scrollView.panGestureRecognizer.translation(in: scrollView.superview).y)")
-        print("TopConstraint = \(searchViewTopConstraint.constant)")
-        if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < -30, searchViewTopConstraint.constant >= -80 {
+        let scrollViewVerticalValue: CGFloat = -60
+        let searchViewTopConstraintMaxValue: CGFloat = -80
+        let searchViewTopConstraintMinValue: CGFloat = -5
+        let searchViewTopConstraintVelocity: CGFloat = -5
+        
+        if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < scrollViewVerticalValue, searchViewTopConstraint.constant >= searchViewTopConstraintMaxValue {
             searchViewTopConstraint.constant = scrollView.panGestureRecognizer.translation(in: scrollView.superview).y
-            //self.collectionView.contentInset.top = 0
         } else {
-            if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0, searchViewTopConstraint.constant <= -5 {
-                searchViewTopConstraint.constant += 5
-                //self.collectionView.contentInset.top = 56
+            if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0, searchViewTopConstraint.constant <= searchViewTopConstraintMinValue {
+                searchViewTopConstraint.constant += searchViewTopConstraintVelocity
             }
         }
         
@@ -266,10 +266,14 @@ extension SearchViewController: UITextFieldDelegate {
         cancelButton.layer.borderWidth = 2
         cancelButton.titleLabel?.textColor = UIColor.white
         cancelButton.layer.borderColor = UIColor.white.cgColor
+        
         if !recentSearches.isEmpty {
             self.recentSearchesTableView.isHidden = false
         }
-        if !(searchField.text?.isEmpty)! {
+        guard let searchTextIsEmpty = searchField.text?.isEmpty else {
+            return
+        }
+        if !searchTextIsEmpty {
             recentSearchesTableView.isHidden = true
         }
     }
@@ -285,11 +289,11 @@ extension SearchViewController: UITextFieldDelegate {
         }
         self.photos = []
         flickrPhotosSearch(searchText: searchTag, pageNumber: 1) {
+            let cellHeight: Int = 44
             self.recentSearches.append(searchTag)
-            self.tableHeight.constant = CGFloat(44 * self.recentSearches.count)
+            self.tableHeight.constant = CGFloat(cellHeight * self.recentSearches.count)
             self.recentSearchesTableView.reloadData()
             print ("Recent searches: \(self.recentSearches)")
-            
         }
     }
 }
