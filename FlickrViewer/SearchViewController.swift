@@ -47,6 +47,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         collectionView.contentInset.top = 60
         searchTextInput(searchField)
         recentSearchesTableView.isHidden = true
+        cancelButton.alpha = 0
 
         //MARK-layout settings
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -57,6 +58,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         let refresher = PullToRefresh()
         collectionView.addPullToRefresh(refresher) {
             self.photos = []
+            self.justifiedSizes = []
             self.getExploreFlickrPhotos(pageNumber: 1) {
                 print("POPULAR PHOTOS REFRESHED")
                 self.currentLoadedPage = 1
@@ -93,12 +95,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             } else {
                 self?.photos += validatedArray
             }
-            guard 
+            guard
                   let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: validatedArray) else {
                 return
             }
             self?.justifiedSizes += justifiedLayoutPics
-            print("PHOTOS ARRAY COUNT IS \(String(describing: self?.justifiedSizes.count))")
+            print("PHOTOS ARRAY COUNT IS \(String(describing: self?.photos.count))")
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
             self?.collectionView.endAllRefreshing()
@@ -129,7 +131,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
 
     private func flickrPhotosSearch(searchText: String, pageNumber: Int, completion: @escaping () -> ()) {
-        
+        activityIndicator.startAnimating()
         currentSearch = searchText
         print("Current SEARCH is \(String(describing: currentSearch))")
 
@@ -181,7 +183,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         }
         var tempJustifiedSizes: [CGSize] = []
             tempJustifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
-        self.collectionView.reloadData()
         return tempJustifiedSizes
     }
 }
@@ -204,6 +205,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {
             return UICollectionViewCell()
         }
+        guard photos.count > 0 else {
+            return cell
+        }
         cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
         return cell
     }
@@ -225,11 +229,11 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         //MARK - Search Bar Scroll Hiding
         let scrollViewVerticalValue: CGFloat = -60
         let searchViewTopConstraintMaxValue: CGFloat = -80
-        let searchViewTopConstraintMinValue: CGFloat = -5
-        let searchViewTopConstraintVelocity: CGFloat = 5
+        let searchViewTopConstraintMinValue: CGFloat = -7
+        let searchViewTopConstraintVelocity: CGFloat = 7
         
         if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < scrollViewVerticalValue, searchViewTopConstraint.constant >= searchViewTopConstraintMaxValue {
-            searchViewTopConstraint.constant = scrollView.panGestureRecognizer.translation(in: scrollView.superview).y
+            searchViewTopConstraint.constant -= searchViewTopConstraintVelocity
         } else {
             if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0, searchViewTopConstraint.constant <= searchViewTopConstraintMinValue {
                 searchViewTopConstraint.constant += searchViewTopConstraintVelocity
@@ -243,6 +247,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2 {
             self.activityIndicator.startAnimating()
+            collectionView.contentInset.bottom = 60
             guard let searchTag = currentSearch else {
                 getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
                     self.currentLoadedPage += 1
@@ -291,12 +296,19 @@ extension SearchViewController: UITextFieldDelegate {
             return
         }
         self.photos = []
+        self.justifiedSizes = []
         flickrPhotosSearch(searchText: searchTag, pageNumber: 1) {
+
+            //MARK - RecentSearchesUpdate
             let cellHeight: Int = 44
             self.recentSearches.append(searchTag)
             self.tableHeight.constant = CGFloat(cellHeight * self.recentSearches.count)
             self.recentSearchesTableView.reloadData()
             print ("Recent searches: \(self.recentSearches)")
+            
+            //MARK - AutoScrollToCollectionViewTop
+            self.collectionView.setContentOffset(CGPoint.zero, animated: false)
+            self.collectionView.reloadData()
         }
     }
 }
@@ -332,10 +344,12 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.photos = []
+        self.justifiedSizes = []
         recentSearchesTableView.isHidden = true
         searchField.text = recentSearches[indexPath.row]
         
         flickrPhotosSearch(searchText: recentSearches[indexPath.row], pageNumber: 1) {
+            self.collectionView.reloadData()
         }
     }
 }
