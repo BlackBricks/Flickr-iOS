@@ -15,5 +15,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
 
     func setupWithPhoto(flickrPhoto: Photo) {
         resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL?)
+        //resultImageView.sd_
     }
 }

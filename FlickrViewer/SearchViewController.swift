@@ -93,11 +93,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             } else {
                 self?.photos += validatedArray
             }
-            guard let allPhotos = self?.photos,
-                  let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: allPhotos) else {
+            guard 
+                  let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: validatedArray) else {
                 return
             }
-            self?.justifiedSizes = justifiedLayoutPics
+            self?.justifiedSizes += justifiedLayoutPics
             print("PHOTOS ARRAY COUNT IS \(String(describing: self?.justifiedSizes.count))")
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
@@ -118,6 +118,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         requestUrl.page +
         String(pageNumber) +
         requestUrl.format
+        
         requestAndParse(flickrUrlString: flickrUrlString)
         completion()
     }
@@ -178,7 +179,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             let size = CGSize(width: width, height: height)
             unfetchedSizes.append(size)
         }
-        let tempJustifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
+        var tempJustifiedSizes: [CGSize] = []
+            tempJustifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
+        self.collectionView.reloadData()
         return tempJustifiedSizes
     }
 }
@@ -238,7 +241,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
               requestIsFinished else {
             return
         }
-        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height {
+        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2 {
             self.activityIndicator.startAnimating()
             guard let searchTag = currentSearch else {
                 getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
