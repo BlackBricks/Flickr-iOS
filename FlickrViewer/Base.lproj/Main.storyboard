@@ -90,7 +90,7 @@
                                                 <rect key="frame" x="304" y="13.5" width="61" height="31"/>
                                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="61" id="WtA-3Z-TUA"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="61" id="WtA-3Z-TUA"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
                                                 <state key="normal" title="Cancel">
@@ -113,6 +113,7 @@
                                             <constraint firstItem="Bsf-VK-Lf3" firstAttribute="centerY" secondItem="bMb-1p-Ee9" secondAttribute="centerY" id="2wU-Gw-Czh"/>
                                             <constraint firstItem="pUg-1t-COE" firstAttribute="baseline" secondItem="bMb-1p-Ee9" secondAttribute="baseline" id="3XJ-I0-oae"/>
                                             <constraint firstItem="Bsf-VK-Lf3" firstAttribute="top" secondItem="OeO-Ta-usU" secondAttribute="top" constant="17" id="3bR-ZD-9dU"/>
+                                            <constraint firstItem="bMb-1p-Ee9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="OeO-Ta-usU" secondAttribute="leading" constant="20" symbolic="YES" id="7bo-Xg-hZx"/>
                                             <constraint firstAttribute="trailing" secondItem="bMb-1p-Ee9" secondAttribute="trailing" constant="10" id="C0S-qw-S3Q"/>
                                             <constraint firstAttribute="trailing" secondItem="pUg-1t-COE" secondAttribute="trailing" constant="69" id="S9m-ha-IWe"/>
                                             <constraint firstItem="Bsf-VK-Lf3" firstAttribute="leading" secondItem="OeO-Ta-usU" secondAttribute="leading" constant="11" id="VGJ-R7-GNX"/>

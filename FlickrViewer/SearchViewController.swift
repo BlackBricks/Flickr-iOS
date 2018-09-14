@@ -45,6 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         super.viewDidLoad()
         activityIndicator.startAnimating()
         collectionView.contentInset.top = 60
+        collectionView.showsVerticalScrollIndicator = false
         searchTextInput(searchField)
         recentSearchesTableView.isHidden = true
         cancelButton.alpha = 0
@@ -72,15 +73,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
     
     private func requestAndParse(flickrUrlString: String) {
+        print(flickrUrlString)
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard response.result.isSuccess else {
                 print("REQUEST ERROR\(String(describing: response.result.error))")
                 return
             }
+            //print(response)
             guard let photoData = response.data else {
                 return
             }
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
+            
             guard let photoArray = flickrPhotos?.photos.photo else {
                 self?.ShowErrorMessage()
                 return

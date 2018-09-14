@@ -72,6 +72,10 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         definedSize = CGSize(width: newWidth, height: newHeight)
         currentImage.frame.size = CGSize(width: newWidth, height: newHeight)
         currentImage.frame.origin.y = self.frame.midY - newHeight/2
-        currentImage?.sd_setImage(with: flickrPhoto.photoUrl as URL?)
+        
+        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
+        { (image, error, cache, url) in
+            self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
+        }
     }
 }
