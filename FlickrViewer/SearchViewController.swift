@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import PullToRefresh
 
 class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchCellDelegate {
     
@@ -18,6 +17,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private var currentLoadedPage = 0
     private var currentSearch: String? = nil
     private var recentSearches: [String] = []
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchField: UITextField!
@@ -40,7 +40,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         cancelButton.alpha = 0
         recentSearchesTableView.isHidden = true
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
@@ -56,15 +56,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             layout.minimumInteritemSpacing = 0
         }
         //MARK-refresher
-        let refresher = PullToRefresh()
-        collectionView.addPullToRefresh(refresher) {
-            self.photos = []
-            self.justifiedSizes = []
-            self.getExploreFlickrPhotos(pageNumber: 1) {
-                print("POPULAR PHOTOS REFRESHED")
-                self.currentLoadedPage = 1
-            }
-        }
+        refreshControl.addTarget(self, action: #selector(SearchViewController.refresh), for: .valueChanged)
+        self.collectionView.addSubview(refreshControl)
 
         //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
@@ -72,14 +65,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         }
     }
     
+    @objc func refresh(){
+        self.photos = []
+        self.justifiedSizes = []
+        self.getExploreFlickrPhotos(pageNumber: 1) {
+        self.refreshControl.endRefreshing()
+        print("POPULAR PHOTOS REFRESHED")
+        self.currentLoadedPage = 1
+        }
+    }
     private func requestAndParse(flickrUrlString: String) {
-        print(flickrUrlString)
+        
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard response.result.isSuccess else {
                 print("REQUEST ERROR\(String(describing: response.result.error))")
                 return
             }
-            //print(response)
+            
             guard let photoData = response.data else {
                 return
             }
@@ -107,7 +109,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             print("PHOTOS ARRAY COUNT IS \(String(describing: self?.photos.count))")
             self?.collectionView.reloadData()
             self?.activityIndicator.stopAnimating()
-            self?.collectionView.endAllRefreshing()
         }
     }
 
@@ -169,7 +170,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         })
         error.addAction(ok)
         self.present(error, animated: true, completion: nil)
-        self.collectionView.endAllRefreshing()
+        self.refreshControl.endRefreshing()
         self.activityIndicator.stopAnimating()
     }
 
@@ -239,7 +240,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y < scrollViewVerticalValue, searchViewTopConstraint.constant >= searchViewTopConstraintMaxValue {
             searchViewTopConstraint.constant -= searchViewTopConstraintVelocity
         } else {
-            if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0, searchViewTopConstraint.constant <= searchViewTopConstraintMinValue {
+            if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > searchViewTopConstraintMaxValue, searchViewTopConstraint.constant <= searchViewTopConstraintMinValue {
                 searchViewTopConstraint.constant += searchViewTopConstraintVelocity
             }
         }
