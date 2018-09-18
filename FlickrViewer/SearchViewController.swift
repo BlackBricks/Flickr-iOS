@@ -229,7 +229,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         desVC.selectedIndex = indexPath
         show(desVC, sender: nil)
     }
-    
+
     func setSearchBarHide() {
         UIView.animate(withDuration: 0.4) {
             self.searchViewTopConstraint.constant = -80
@@ -237,7 +237,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             self.searchView.layoutIfNeeded()
         }
     }
-    
+
     func setSearchBarShow() {
         UIView.animate(withDuration: 0.4) {
             self.searchViewTopConstraint.constant = 0
@@ -245,7 +245,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             self.searchView.layoutIfNeeded()
         }
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
         recentSearchesTableView.isHidden = true
@@ -253,16 +253,16 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         //MARK - Search Bar Scroll Hiding
 
         print("PAN GESTURE \(scrollView.panGestureRecognizer.translation(in: scrollView.superview).y)")
-        print ("CONTENT OFFSET \(scrollView.contentOffset.y)")
-        
+        print("CONTENT OFFSET \(scrollView.contentOffset.y)")
+
         var scrollingUp = false
-        
+
         if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0 {
             scrollingUp = false
         } else {
             scrollingUp = true
         }
-        
+
         if scrollView.contentOffset.y > 0 {
             if searchBarIsHidden, !scrollingUp {
                 setSearchBarShow()
@@ -271,7 +271,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                 setSearchBarHide()
             }
         } else {
-            if  searchBarIsHidden, scrollView.contentOffset.y < 0, scrollView.contentOffset.y > -60 {
+            if searchBarIsHidden, scrollView.contentOffset.y < 60, scrollView.contentOffset.y > -60 {
                 setSearchBarShow()
             }
         }
