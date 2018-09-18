@@ -20,6 +20,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private var recentSearches: [String] = []
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
+    private var lastContentOffset: CGFloat = -60
 
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchField: UITextField!
@@ -251,18 +252,16 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         recentSearchesTableView.isHidden = true
 
         //MARK - Search Bar Scroll Hiding
-
-        print("PAN GESTURE \(scrollView.panGestureRecognizer.translation(in: scrollView.superview).y)")
-        print("CONTENT OFFSET \(scrollView.contentOffset.y)")
-
         var scrollingUp = false
 
-        if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0 {
-            scrollingUp = false
-        } else {
+        if scrollView.contentOffset.y > lastContentOffset {
             scrollingUp = true
+            
+        } else {
+            scrollingUp = false
         }
-
+        lastContentOffset = scrollView.contentOffset.y
+        
         if scrollView.contentOffset.y > 0 {
             if searchBarIsHidden, !scrollingUp {
                 setSearchBarShow()
