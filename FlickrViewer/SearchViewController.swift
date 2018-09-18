@@ -16,11 +16,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private var request: DataRequest? = nil
     private var currentLoadedPage = 0
     private var currentSearch: String? = nil
-    private var searchBarIsHidden = false
+    private var searchBarIsVisible = true
     private var recentSearches: [String] = []
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
-    private var lastContentOffset: CGFloat = -60
+    private var lastContentOffset: CGFloat = -56
 
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchField: UITextField!
@@ -232,25 +232,17 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func setSearchBarVisible(visibility: Bool) {
-        if !visibility {
-            guard !searchBarIsHidden else {
-                return
+        guard searchBarIsVisible != visibility else {
+            return
+        }
+        self.searchBarIsVisible = visibility
+        UIView.animate(withDuration: 0.4) {
+            var offset: CGFloat = 0
+            if !visibility {
+                offset = -self.searchView.frame.height
             }
-            UIView.animate(withDuration: 0.4) {
-                let hiddenSearchBarTopConstraint: CGFloat = -80
-                self.searchViewTopConstraint.constant = hiddenSearchBarTopConstraint
-                self.searchBarIsHidden = true
-                self.searchView.layoutIfNeeded()
-            }
-        } else {
-            guard searchBarIsHidden else {
-                return
-            }
-            UIView.animate(withDuration: 0.4) {
-                self.searchViewTopConstraint.constant = 0
-                self.searchBarIsHidden = false
-                self.searchView.layoutIfNeeded()
-            }
+            self.searchViewTopConstraint.constant = offset
+            self.searchView.layoutIfNeeded()
         }
     }
 
