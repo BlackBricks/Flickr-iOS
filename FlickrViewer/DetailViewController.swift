@@ -16,7 +16,6 @@ class DetailViewController: UIViewController, DetailViewCellDelegate {
     
     var photos: [Photo] = []
     var selectedIndex: IndexPath? = nil
-    var detailDelegate: DetailViewCellDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +31,7 @@ class DetailViewController: UIViewController, DetailViewCellDelegate {
         collectionView.reloadData()
     }
     
+    //MARK - Detail View closing function
     func close() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -46,7 +46,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCollectionViewCell", for: indexPath) as? DetailCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+        cell.detailViewContentSet(flickrPhoto: photos[indexPath.row])
         cell.detailDelegate = self
         return cell
     }

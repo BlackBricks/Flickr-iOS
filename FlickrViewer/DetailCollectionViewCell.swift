@@ -17,8 +17,15 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var currentImage: UIImageView!
+    
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var avatar: UIImageView!
+    @IBOutlet weak var usernameLabel: UILabel!
+    
     @IBOutlet weak var bottomView: UIView!
+    @IBOutlet weak var photoTitle: UILabel!
+    @IBOutlet weak var countViews: UILabel!
+    
     
     @IBAction func detailViewClosing(_ sender: UIButton) {
         detailDelegate?.close()
@@ -49,7 +56,14 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         return currentImage
     }
     
-    func setupWithPhoto(flickrPhoto: Photo) {
+    func detailViewContentSet(flickrPhoto: Photo){
+        avatar.sd_setImage(with: flickrPhoto.avatarURL as URL?)
+        print ("\(flickrPhoto.avatarURL)")
+        usernameLabel.text = flickrPhoto.ownername
+        
+        photoTitle.text = flickrPhoto.title
+        countViews.text = "Views \(flickrPhoto.views)"
+        
         let width = flickrPhoto.size().width
         let height = flickrPhoto.size().height
         let aspectRatio = width/height
@@ -58,6 +72,10 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         definedSize = CGSize(width: newWidth, height: newHeight)
         currentImage.frame.size = CGSize(width: newWidth, height: newHeight)
         currentImage.frame.origin.y = self.frame.midY - newHeight/2
-        currentImage?.sd_setImage(with: flickrPhoto.photoUrl as URL?)
+        
+        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
+        { (image, error, cache, url) in
+            self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
+        }
     }
 }
