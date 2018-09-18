@@ -231,19 +231,26 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         show(desVC, sender: nil)
     }
 
-    func setSearchBarHide() {
-        UIView.animate(withDuration: 0.4) {
-            self.searchViewTopConstraint.constant = -80
-            self.searchBarIsHidden = true
-            self.searchView.layoutIfNeeded()
-        }
-    }
-
-    func setSearchBarShow() {
-        UIView.animate(withDuration: 0.4) {
-            self.searchViewTopConstraint.constant = 0
-            self.searchBarIsHidden = false
-            self.searchView.layoutIfNeeded()
+    func setSearchBarVisible(visibility: Bool) {
+        if !visibility {
+            guard !searchBarIsHidden else {
+                return
+            }
+            UIView.animate(withDuration: 0.4) {
+                let hiddenSearchBarTopConstraint: CGFloat = -80
+                self.searchViewTopConstraint.constant = hiddenSearchBarTopConstraint
+                self.searchBarIsHidden = true
+                self.searchView.layoutIfNeeded()
+            }
+        } else {
+            guard searchBarIsHidden else {
+                return
+            }
+            UIView.animate(withDuration: 0.4) {
+                self.searchViewTopConstraint.constant = 0
+                self.searchBarIsHidden = false
+                self.searchView.layoutIfNeeded()
+            }
         }
     }
 
@@ -256,23 +263,17 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
         if scrollView.contentOffset.y > lastContentOffset {
             scrollingUp = true
-            
+
         } else {
             scrollingUp = false
         }
         lastContentOffset = scrollView.contentOffset.y
-        
-        if scrollView.contentOffset.y > 0 {
-            if searchBarIsHidden, !scrollingUp {
-                setSearchBarShow()
-            }
-            if !searchBarIsHidden, scrollingUp {
-                setSearchBarHide()
-            }
-        } else {
-            if searchBarIsHidden, scrollView.contentOffset.y < 60, scrollView.contentOffset.y > -60 {
-                setSearchBarShow()
-            }
+
+
+        if !scrollingUp {
+            setSearchBarVisible(visibility: true)
+        } else if scrollView.contentOffset.y > 0 {
+            setSearchBarVisible(visibility: false)
         }
 
         //MARK - Pagination
