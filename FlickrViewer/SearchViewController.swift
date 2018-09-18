@@ -17,6 +17,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private var currentLoadedPage = 0
     private var currentSearch: String? = nil
     private var searchBarIsVisible = true
+    private var recentSearchesIsVisible = false
     private var recentSearches: [String] = []
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
@@ -33,15 +34,19 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     @IBOutlet weak var recentSearchesTableView: UITableView!
 
     @IBAction func textDidChange(_ sender: UITextField) {
-        recentSearchesTableView.isHidden = true
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.recentSearchesTableView.layer.opacity = 0
+            }, completion: nil)
     }
 
     @IBAction func cancelTapped(_ sender: UIButton) {
         glassIcon.tintColor = UIColor.gray
         searchField.text = ""
         searchField.resignFirstResponder()
-        cancelButton.alpha = 0
-        recentSearchesTableView.isHidden = true
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.recentSearchesTableView.layer.opacity = 0
+            self?.cancelButton.alpha = 0
+            }, completion: nil)
     }
 
     override func viewDidLoad() {
@@ -50,7 +55,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         collectionView.contentInset.top = 60
         collectionView.showsVerticalScrollIndicator = false
         searchTextInput(searchField)
-        recentSearchesTableView.isHidden = true
+        recentSearchesTableView.layer.opacity = 0
         cancelButton.alpha = 0
 
         //MARK-layout settings
@@ -255,7 +260,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
         if scrollView.contentOffset.y > lastContentOffset {
             scrollingUp = true
-
         } else {
             scrollingUp = false
         }
@@ -297,14 +301,17 @@ extension SearchViewController: UITextFieldDelegate {
         searchField.text? = ""
         searchField.returnKeyType = UIReturnKeyType.search
         glassIcon.tintColor = UIColor.white
-        cancelButton.alpha = 1
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.cancelButton.alpha = 1
+            }, completion: nil)
 
         cancelButton.layer.borderWidth = 2
         cancelButton.titleLabel?.textColor = UIColor.white
         cancelButton.layer.borderColor = UIColor.white.cgColor
 
         if !recentSearches.isEmpty {
-            self.recentSearchesTableView.isHidden = false
+            setRecentSearchesVisible(visibility: true)
+            recentSearchesTableView.isHidden = false
         }
         guard let searchTextIsEmpty = searchField.text?.isEmpty else {
             return
@@ -328,6 +335,9 @@ extension SearchViewController: UITextFieldDelegate {
         flickrPhotosSearch(searchText: searchTag, pageNumber: 1) {
 
             //MARK - RecentSearchesUpdate
+            guard !self.recentSearches.contains(searchTag) else {
+                return
+            }
             self.recentSearches.append(searchTag)
             self.tableHeight.constant = CGFloat(self.recentSearchesCellHeight * self.recentSearches.count)
             self.recentSearchesTableView.reloadData()
@@ -342,7 +352,20 @@ extension SearchViewController: UITextFieldDelegate {
 
 //MARK - Recent Searches Table View
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
-
+    
+    func setRecentSearchesVisible(visibility: Bool) {
+        self.recentSearchesIsVisible = visibility
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            if !visibility {
+                self?.recentSearchesTableView.layer.opacity = 0
+                self?.recentSearchesTableView.isHidden = true
+            }
+            self?.recentSearchesTableView.layer.opacity = 1
+            self?.recentSearchesTableView.isHidden = false
+            self?.searchView.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
     func removeCell(cell: RecentSearchTableViewCell, indexPath: IndexPath) {
         let index = indexPath
         recentSearches.remove(at: index.row)
