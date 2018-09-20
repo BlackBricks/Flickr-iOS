@@ -33,7 +33,7 @@
                                         <rect key="frame" x="4" y="0.0" width="367" height="647"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XpK-pj-VvK">
-                                                <rect key="frame" x="-5" y="0.0" width="377" height="647"/>
+                                                <rect key="frame" x="-6" y="0.0" width="379" height="647"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="3Wd-pZ-rFJ">
                                                     <size key="itemSize" width="50" height="50"/>
@@ -51,7 +51,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="XpK-pj-VvK" secondAttribute="bottom" id="7dO-Mi-AJl"/>
-                                            <constraint firstItem="XpK-pj-VvK" firstAttribute="leading" secondItem="M9P-Vz-Q2k" secondAttribute="leading" constant="-5" id="HXI-JE-gaf"/>
+                                            <constraint firstItem="XpK-pj-VvK" firstAttribute="leading" secondItem="M9P-Vz-Q2k" secondAttribute="leading" constant="-6" id="HXI-JE-gaf"/>
                                             <constraint firstItem="XpK-pj-VvK" firstAttribute="top" secondItem="M9P-Vz-Q2k" secondAttribute="top" id="jOA-3P-MmT"/>
                                             <constraint firstItem="XpK-pj-VvK" firstAttribute="centerX" secondItem="M9P-Vz-Q2k" secondAttribute="centerX" id="mCR-gX-JMl"/>
                                         </constraints>
@@ -60,7 +60,7 @@
                                         <rect key="frame" x="4" y="0.0" width="367" height="647"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kWw-VP-gHP">
-                                                <rect key="frame" x="-5" y="0.0" width="377" height="647"/>
+                                                <rect key="frame" x="-6" y="0.0" width="379" height="647"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="8PO-Wo-nqy">

@@ -24,6 +24,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     private var lastContentOffset: CGFloat = -56
+    private let basicOffset: CGFloat = 4
     
 
     @IBOutlet weak var searchBarView: UIView!
@@ -62,9 +63,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        exploreCollectionView.contentInset.top = searchBarView.frame.height+4
+        exploreCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
         exploreCollectionView.showsVerticalScrollIndicator = false
-        searchResultsCollectionView.contentInset.top = searchBarView.frame.height+4
+        searchResultsCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
         searchResultsCollectionView.showsVerticalScrollIndicator = false
         searchTextInput(searchField)
         recentSearchesTableView.layer.opacity = 0
@@ -74,14 +75,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         //MARK-layout settings
 
         if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 4
-            layout.sectionInset.left = 3
-            layout.sectionInset.right = 3
+            layout.minimumLineSpacing = basicOffset
+            layout.sectionInset.left = basicOffset
+            layout.sectionInset.right = basicOffset
         }
         if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 4
-            layout.sectionInset.left = 3
-            layout.sectionInset.right = 3
+            layout.minimumLineSpacing = basicOffset
+            layout.sectionInset.left = basicOffset
+            layout.sectionInset.right = basicOffset
         }
 
         //MARK-refresher
@@ -158,7 +159,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
 
             if weakself.searchModeIsOn {
                 weakself.searchResultsCollectionView.reloadData()
-                weakself.searchResultsCollectionView.contentInset.top = weakself.searchBarView.frame.height+4
+                weakself.searchResultsCollectionView.contentInset.top = weakself.searchBarView.frame.height + weakself.basicOffset
             } else {
                 weakself.exploreCollectionView.reloadData()
             }
@@ -415,7 +416,7 @@ extension SearchViewController: UITextFieldDelegate {
             print("Recent searches: \(self.recentSearches)")
 
             //MARK - AutoScrollToCollectionViewTop
-            self.searchResultsCollectionView.setContentOffset(CGPoint(x: 0, y: -(self.searchBarView.frame.height+4)), animated: false)
+            self.searchResultsCollectionView.setContentOffset(CGPoint(x: 0, y: -(self.searchBarView.frame.height + self.basicOffset)), animated: false)
             self.searchResultsCollectionView.reloadData()
         }
     }
