@@ -25,6 +25,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     private var lastContentOffset: CGFloat = -56
     private let basicOffset: CGFloat = 4
+    private let layoutPreferredHeight: CGFloat = 165
 
 
     @IBOutlet weak var searchBarView: UIView!
@@ -246,7 +247,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 3, preferredHeight: 165)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 3, preferredHeight: layoutPreferredHeight)
         return tempJustifiedSizes
     }
 }
@@ -348,8 +349,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
               requestIsFinished else {
             return
         }
-        print (scrollView.contentOffset.y, scrollView.contentSize.height - scrollView.frame.height * 2)
-        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2, scrollView.contentSize.height > 0 {
+        
+        let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height
+        
+        if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
             self.activityIndicator.startAnimating()
 
             guard let searchTag = currentSearch else {
@@ -442,7 +445,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableHeight.constant = CGFloat(44 * recentSearches.count)
+        tableHeight.constant = CGFloat(recentSearchesCellHeight * recentSearches.count)
         return recentSearches.count
     }
 
