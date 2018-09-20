@@ -24,6 +24,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     private var lastContentOffset: CGFloat = -56
+    
 
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var searchField: UITextField!
@@ -58,13 +59,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         searchResultsCollectionView.reloadData()
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        exploreCollectionView.contentInset.top = 60
+        exploreCollectionView.contentInset.top = searchBarView.frame.height+4
         exploreCollectionView.showsVerticalScrollIndicator = false
-        searchResultsCollectionView.contentInset.top = 60
+        searchResultsCollectionView.contentInset.top = searchBarView.frame.height+4
         searchResultsCollectionView.showsVerticalScrollIndicator = false
         searchTextInput(searchField)
         recentSearchesTableView.layer.opacity = 0
@@ -158,7 +158,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
 
             if weakself.searchModeIsOn {
                 weakself.searchResultsCollectionView.reloadData()
-                weakself.searchResultsCollectionView.contentInset.top = 60
+                weakself.searchResultsCollectionView.contentInset.top = weakself.searchBarView.frame.height+4
             } else {
                 weakself.exploreCollectionView.reloadData()
             }
@@ -241,7 +241,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 367, preferredHeight: 170)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 367, preferredHeight: 165)
         return tempJustifiedSizes
     }
 }
@@ -415,7 +415,7 @@ extension SearchViewController: UITextFieldDelegate {
             print("Recent searches: \(self.recentSearches)")
 
             //MARK - AutoScrollToCollectionViewTop
-            self.searchResultsCollectionView.setContentOffset(CGPoint(x: 0, y: -60), animated: false)
+            self.searchResultsCollectionView.setContentOffset(CGPoint(x: 0, y: -(self.searchBarView.frame.height+4)), animated: false)
             self.searchResultsCollectionView.reloadData()
         }
     }
