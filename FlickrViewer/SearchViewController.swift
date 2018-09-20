@@ -51,6 +51,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         currentSearch = nil
         searchPhotos = []
         searchField.resignFirstResponder()
+        request?.cancel()
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
             self?.recentSearchesTableView.layer.opacity = 0
             self?.glassIcon.tintColor = UIColor.gray
@@ -347,7 +348,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
               requestIsFinished else {
             return
         }
-        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2 {
+        print (scrollView.contentOffset.y, scrollView.contentSize.height - scrollView.frame.height * 2)
+        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2, scrollView.contentSize.height > 0 {
             self.activityIndicator.startAnimating()
 
             guard let searchTag = currentSearch else {
