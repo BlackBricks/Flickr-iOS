@@ -74,9 +74,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         //MARK-layout settings
 
         if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 3
-            layout.sectionInset.left = 4
-            layout.sectionInset.right = 4
+            layout.minimumLineSpacing = 4
+            layout.sectionInset.left = 3
+            layout.sectionInset.right = 3
         }
         if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 4
