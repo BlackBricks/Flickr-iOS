@@ -74,15 +74,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         //MARK-layout settings
 
         if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 2
-            layout.sectionInset.left = 2
-            layout.sectionInset.right = 2
-            
+            layout.minimumLineSpacing = 3
+            layout.sectionInset.left = 4
+            layout.sectionInset.right = 4
         }
         if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 2
-            layout.sectionInset.left = 2
-            layout.sectionInset.right = 2
+            layout.minimumLineSpacing = 4
+            layout.sectionInset.left = 3
+            layout.sectionInset.right = 3
         }
 
         //MARK-refresher
@@ -242,7 +241,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 367, preferredHeight: 170)
         return tempJustifiedSizes
     }
 }
@@ -347,9 +346,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2 {
             self.activityIndicator.startAnimating()
 
-            searchResultsCollectionView.contentInset.bottom = 60
             guard let searchTag = currentSearch else {
-                exploreCollectionView.contentInset.bottom = 60
                 getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
                     self.currentLoadedPage += 1
                     print("One more explore page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
@@ -357,7 +354,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                 return
             }
             print("Loading next page. Current page now is \(currentLoadedPage)")
-            searchResultsCollectionView.contentInset.bottom = 60
             flickrPhotosSearch(searchText: searchTag, pageNumber: currentLoadedPage + 1) {
                 print("One more search page loaded. CURRENT PAGE IS \(self.currentLoadedPage)")
             }
@@ -369,7 +365,6 @@ extension SearchViewController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         searchModeIsOn = true
-        //searchResultsView.isHidden = true
         searchField.text? = ""
         searchField.returnKeyType = UIReturnKeyType.search
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
