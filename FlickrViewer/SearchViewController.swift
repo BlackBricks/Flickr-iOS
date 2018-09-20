@@ -11,65 +11,98 @@ import Alamofire
 
 class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchCellDelegate {
 
-    private var photos: [Photo] = []
+    private var explorePhotos: [Photo] = []
+    private var searchPhotos: [Photo] = []
     private var justifiedSizes: [CGSize] = []
     private var request: DataRequest? = nil
     private var currentLoadedPage = 0
     private var currentSearch: String? = nil
     private var searchBarIsVisible = true
+    private var searchModeIsOn = false
+    private var recentSearchesIsVisible = false
     private var recentSearches: [String] = []
     private let recentSearchesCellHeight: Int = 44
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     private var lastContentOffset: CGFloat = -56
+    private let basicOffset: CGFloat = 4
+    private let layoutPreferredHeight: CGFloat = 165
 
-    @IBOutlet weak var searchView: UIView!
+
+    @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var glassIcon: UIImageView!
     @IBOutlet weak var searchViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var exploreCollectionView: UICollectionView!
     @IBOutlet weak var tableHeight: NSLayoutConstraint!
     @IBOutlet weak var recentSearchesTableView: UITableView!
+    @IBOutlet weak var searchResultsView: UIView!
+    @IBOutlet weak var searchResultsCollectionView: UICollectionView!
 
     @IBAction func textDidChange(_ sender: UITextField) {
-        recentSearchesTableView.isHidden = true
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.recentSearchesTableView.layer.opacity = 0
+        }, completion: nil)
     }
 
     @IBAction func cancelTapped(_ sender: UIButton) {
-        glassIcon.tintColor = UIColor.gray
+        searchModeIsOn = false
         searchField.text = ""
+        currentSearch = nil
+        searchPhotos = []
         searchField.resignFirstResponder()
-        cancelButton.alpha = 0
-        recentSearchesTableView.isHidden = true
+        request?.cancel()
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.recentSearchesTableView.layer.opacity = 0
+            self?.glassIcon.tintColor = UIColor.gray
+            self?.cancelButton.alpha = 0
+            self?.searchResultsView.layer.opacity = 0
+        }, completion: nil)
+        searchResultsCollectionView.reloadData()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        collectionView.contentInset.top = 60
-        collectionView.showsVerticalScrollIndicator = false
+        exploreCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
+        exploreCollectionView.showsVerticalScrollIndicator = false
+        searchResultsCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
+        searchResultsCollectionView.showsVerticalScrollIndicator = false
         searchTextInput(searchField)
-        recentSearchesTableView.isHidden = true
+        recentSearchesTableView.layer.opacity = 0
         cancelButton.alpha = 0
+        searchResultsView.layer.opacity = 0
 
         //MARK-layout settings
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 4
-            layout.minimumInteritemSpacing = 0
+
+        if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = basicOffset
+            layout.sectionInset.left = basicOffset
+            layout.sectionInset.right = basicOffset
         }
+        if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = basicOffset
+            layout.sectionInset.left = basicOffset
+            layout.sectionInset.right = basicOffset
+        }
+
         //MARK-refresher
         refreshControl.addTarget(self, action: #selector(SearchViewController.refresh), for: .valueChanged)
-        self.collectionView.addSubview(refreshControl)
+        self.exploreCollectionView.addSubview(refreshControl)
 
         //Mark-first request
         getExploreFlickrPhotos(pageNumber: 1) {
             self.currentLoadedPage = 1
         }
+
+        self.exploreCollectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCollectionViewCell")
+        self.searchResultsCollectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCollectionViewCell")
+
     }
 
     @objc func refresh() {
-        self.photos = []
+        self.explorePhotos = []
         self.justifiedSizes = []
         self.getExploreFlickrPhotos(pageNumber: 1) {
             self.refreshControl.endRefreshing()
@@ -81,6 +114,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private func requestAndParse(flickrUrlString: String) {
 
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
+            guard let weakself = self else {
+                return
+            }
+
             guard response.result.isSuccess else {
                 print("REQUEST ERROR\(String(describing: response.result.error))")
                 return
@@ -92,7 +129,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             let flickrPhotos = try? JSONDecoder().decode(FlickrPhotos.self, from: photoData)
 
             guard let photoArray = flickrPhotos?.photos.photo else {
-                self?.ShowErrorMessage()
+                weakself.ShowErrorMessage()
                 return
             }
 
@@ -100,19 +137,38 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
                 $0.isPhotoSizeValid()
             }
 
-            if self?.photos.count == 0 {
-                self?.photos = validatedArray
+            if weakself.searchModeIsOn {
+                if weakself.searchPhotos.count == 0 {
+                    weakself.searchPhotos = validatedArray
+                } else {
+                    weakself.searchPhotos += validatedArray
+                }
             } else {
-                self?.photos += validatedArray
+                if weakself.explorePhotos.count == 0 {
+                    weakself.explorePhotos = validatedArray
+                } else {
+                    weakself.explorePhotos += validatedArray
+                }
             }
-            guard
-                    let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: validatedArray) else {
-                return
+            var justifiedLayoutPics: [CGSize] = []
+            if weakself.searchModeIsOn {
+                justifiedLayoutPics = weakself.calculateJustifiedSizes(photos: validatedArray, layoutWidth: weakself.searchResultsCollectionView.frame.width)
+            } else {
+                justifiedLayoutPics = weakself.calculateJustifiedSizes(photos: validatedArray, layoutWidth: weakself.exploreCollectionView.frame.width)
             }
-            self?.justifiedSizes += justifiedLayoutPics
-            print("PHOTOS ARRAY COUNT IS \(String(describing: self?.photos.count))")
-            self?.collectionView.reloadData()
-            self?.activityIndicator.stopAnimating()
+
+            weakself.justifiedSizes += justifiedLayoutPics
+
+            print("SEARCH PHOTOS ARRAY COUNT IS \(String(describing: self?.searchPhotos.count))")
+            print("EXPLORE PHOTOS ARRAY COUNT IS \(String(describing: self?.explorePhotos.count))")
+
+            if weakself.searchModeIsOn {
+                weakself.searchResultsCollectionView.reloadData()
+                weakself.searchResultsCollectionView.contentInset.top = weakself.searchBarView.frame.height + weakself.basicOffset
+            } else {
+                weakself.exploreCollectionView.reloadData()
+            }
+            weakself.activityIndicator.stopAnimating()
         }
     }
 
@@ -166,7 +222,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private func ShowErrorMessage() {
         let error = UIAlertController(
                 title: "Error",
-                message: "Explore photos not set",
+                message: "Photos not set",
                 preferredStyle: .alert
         )
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
@@ -179,7 +235,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
 
     //MARK - Justified Layout Calculation
-    private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize] {
+    private func calculateJustifiedSizes(photos: [Photo], layoutWidth: CGFloat) -> [CGSize] {
         var unfetchedSizes: [CGSize] = []
         for item in photos {
             guard
@@ -191,7 +247,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 370, preferredHeight: 180)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 3, preferredHeight: layoutPreferredHeight)
         return tempJustifiedSizes
     }
 }
@@ -207,17 +263,34 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        if collectionView == exploreCollectionView {
+            return explorePhotos.count
+        } else {
+            return searchPhotos.count
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {
             return UICollectionViewCell()
         }
-        guard photos.count > 0 else {
+        guard explorePhotos.count > 0 || searchPhotos.count > 0 else {
             return cell
         }
-        cell.setupWithPhoto(flickrPhoto: photos[indexPath.row])
+
+        if collectionView == exploreCollectionView {
+            guard indexPath.row < explorePhotos.count else {
+                print("IndexPath is out of range")
+                return cell
+            }
+            cell.setupWithPhoto(flickrPhoto: explorePhotos[indexPath.row])
+        } else {
+            guard indexPath.row < searchPhotos.count else {
+                print("IndexPath is out of range")
+                return cell
+            }
+            cell.setupWithPhoto(flickrPhoto: searchPhotos[indexPath.row])
+        }
         return cell
     }
 
@@ -226,11 +299,16 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             return
         }
-        desVC.photos = self.photos
+        if collectionView == exploreCollectionView {
+            desVC.photos = self.explorePhotos
+        } else {
+            desVC.photos = self.searchPhotos
+        }
         desVC.selectedIndex = indexPath
         show(desVC, sender: nil)
     }
 
+    //MARK - Search Bar Scroll Hiding
     func setSearchBarVisible(visibility: Bool) {
         guard searchBarIsVisible != visibility else {
             return
@@ -239,10 +317,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         UIView.animate(withDuration: 0.4) {
             var offset: CGFloat = 0
             if !visibility {
-                offset = -self.searchView.frame.height
+                offset = -self.searchBarView.frame.height
             }
             self.searchViewTopConstraint.constant = offset
-            self.searchView.layoutIfNeeded()
+            self.searchBarView.layoutIfNeeded()
         }
     }
 
@@ -250,12 +328,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
         recentSearchesTableView.isHidden = true
 
-        //MARK - Search Bar Scroll Hiding
         var scrollingUp = false
 
         if scrollView.contentOffset.y > lastContentOffset {
             scrollingUp = true
-
         } else {
             scrollingUp = false
         }
@@ -273,9 +349,12 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
               requestIsFinished else {
             return
         }
-        if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height * 2 {
+        
+        let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height
+        
+        if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
             self.activityIndicator.startAnimating()
-            collectionView.contentInset.bottom = 60
+
             guard let searchTag = currentSearch else {
                 getExploreFlickrPhotos(pageNumber: currentLoadedPage + 1) {
                     self.currentLoadedPage += 1
@@ -294,17 +373,25 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 extension SearchViewController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        searchModeIsOn = true
         searchField.text? = ""
         searchField.returnKeyType = UIReturnKeyType.search
-        glassIcon.tintColor = UIColor.white
-        cancelButton.alpha = 1
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.glassIcon.tintColor = UIColor.white
+            self?.cancelButton.alpha = 1
+            self?.searchResultsView.layer.opacity = 1
+            self?.searchResultsView.isHidden = false
+        }, completion: nil)
 
         cancelButton.layer.borderWidth = 2
         cancelButton.titleLabel?.textColor = UIColor.white
         cancelButton.layer.borderColor = UIColor.white.cgColor
 
         if !recentSearches.isEmpty {
-            self.recentSearchesTableView.isHidden = false
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+                self?.recentSearchesTableView.layer.opacity = 1
+            }, completion: nil)
+            recentSearchesTableView.isHidden = false
         }
         guard let searchTextIsEmpty = searchField.text?.isEmpty else {
             return
@@ -323,25 +410,29 @@ extension SearchViewController: UITextFieldDelegate {
         guard let searchTag = searchField.text, searchTag != "" else {
             return
         }
-        self.photos = []
+        self.searchPhotos = []
         self.justifiedSizes = []
         flickrPhotosSearch(searchText: searchTag, pageNumber: 1) {
 
             //MARK - RecentSearchesUpdate
+            guard !self.recentSearches.contains(searchTag) else {
+                return
+            }
             self.recentSearches.append(searchTag)
             self.tableHeight.constant = CGFloat(self.recentSearchesCellHeight * self.recentSearches.count)
             self.recentSearchesTableView.reloadData()
             print("Recent searches: \(self.recentSearches)")
 
             //MARK - AutoScrollToCollectionViewTop
-            self.collectionView.setContentOffset(CGPoint.zero, animated: false)
-            self.collectionView.reloadData()
+            self.searchResultsCollectionView.setContentOffset(CGPoint(x: 0, y: -(self.searchBarView.frame.height + self.basicOffset)), animated: false)
+            self.searchResultsCollectionView.reloadData()
         }
     }
 }
 
 //MARK - Recent Searches Table View
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
+
 
     func removeCell(cell: RecentSearchTableViewCell, indexPath: IndexPath) {
         let index = indexPath
@@ -354,7 +445,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableHeight.constant = CGFloat(44 * recentSearches.count)
+        tableHeight.constant = CGFloat(recentSearchesCellHeight * recentSearches.count)
         return recentSearches.count
     }
 
@@ -370,13 +461,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.photos = []
+        self.searchPhotos = []
         self.justifiedSizes = []
         recentSearchesTableView.isHidden = true
         searchField.text = recentSearches[indexPath.row]
 
         flickrPhotosSearch(searchText: recentSearches[indexPath.row], pageNumber: 1) {
-            self.collectionView.reloadData()
+            self.searchResultsCollectionView.reloadData()
         }
     }
 }

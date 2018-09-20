@@ -11,12 +11,13 @@ import SDWebImage
 
 class ImageCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var resultImageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
 
     func setupWithPhoto(flickrPhoto: Photo) {
-        resultImageView.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
+        imageView.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
         { (image, error, cache, url) in
-            self.resultImageView.sd_setImage(with: NSURL(string: flickrPhoto.url_m) as URL?, placeholderImage: self.resultImageView.image)
+            self.imageView.sd_setImage(with: NSURL(string: flickrPhoto.url_m) as URL?, placeholderImage: self.imageView.image)
         }
+        
     }
 }

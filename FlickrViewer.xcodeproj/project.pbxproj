@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E5938C82152313A000E681F /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */; };
 		0E8601292148D89500F15102 /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */; };
 		0E97290F214A624400A36795 /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */; };
 		0E972911214A63E900A36795 /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E972910214A63E500A36795 /* ProximaNova-Light.ttf */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Black.ttf"; sourceTree = "<group>"; };
 		0E972910214A63E500A36795 /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Light.ttf"; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				F370EC11212564650068ED7B /* FlickrURL.swift */,
 				F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */,
 				F39F9AEF20DAA9CA00BC57B7 /* Main.storyboard */,
+				0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */,
 				F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */,
 				F39F9AF720DAA9CF00BC57B7 /* LaunchScreen.storyboard */,
 				F39F9AFA20DAA9CF00BC57B7 /* Info.plist */,
@@ -217,6 +220,7 @@
 				F39F9AF920DAA9CF00BC57B7 /* LaunchScreen.storyboard in Resources */,
 				F39F9AF620DAA9CF00BC57B7 /* Assets.xcassets in Resources */,
 				F39F9AF120DAA9CA00BC57B7 /* Main.storyboard in Resources */,
+				0E5938C82152313A000E681F /* ImageCollectionViewCell.xib in Resources */,
 				0E97290F214A624400A36795 /* ProximaNova-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
