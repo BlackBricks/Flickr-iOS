@@ -25,7 +25,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     private var lastContentOffset: CGFloat = -56
     private let basicOffset: CGFloat = 4
-    
+
 
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var searchField: UITextField!
@@ -148,10 +148,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
                     weakself.explorePhotos += validatedArray
                 }
             }
-            guard
-                    let justifiedLayoutPics = self?.calculateJustifiedSizes(photos: validatedArray) else {
-                return
+            var justifiedLayoutPics: [CGSize] = []
+            if weakself.searchModeIsOn {
+                justifiedLayoutPics = weakself.calculateJustifiedSizes(photos: validatedArray, layoutWidth: weakself.searchResultsCollectionView.frame.width)
+            } else {
+                justifiedLayoutPics = weakself.calculateJustifiedSizes(photos: validatedArray, layoutWidth: weakself.exploreCollectionView.frame.width)
             }
+
             weakself.justifiedSizes += justifiedLayoutPics
 
             print("SEARCH PHOTOS ARRAY COUNT IS \(String(describing: self?.searchPhotos.count))")
@@ -230,7 +233,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
 
     //MARK - Justified Layout Calculation
-    private func calculateJustifiedSizes(photos: [Photo]) -> [CGSize] {
+    private func calculateJustifiedSizes(photos: [Photo], layoutWidth: CGFloat) -> [CGSize] {
         var unfetchedSizes: [CGSize] = []
         for item in photos {
             guard
@@ -242,7 +245,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: 367, preferredHeight: 165)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 3, preferredHeight: 165)
         return tempJustifiedSizes
     }
 }
