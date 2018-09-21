@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SDWebImage
 
 class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchCellDelegate {
 
@@ -64,6 +65,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        SDImageCache.shared().clearMemory()
+        SDImageCache.shared().clearDisk()
+        UIApplication.shared.statusBarView?.backgroundColor = UIColor.gray
         activityIndicator.startAnimating()
         exploreCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
         exploreCollectionView.showsVerticalScrollIndicator = false
@@ -104,6 +108,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     @objc func refresh() {
         self.explorePhotos = []
         self.justifiedSizes = []
+        SDImageCache.shared().clearMemory()
+        SDImageCache.shared().clearDisk()
         self.getExploreFlickrPhotos(pageNumber: 1) {
             self.refreshControl.endRefreshing()
             print("POPULAR PHOTOS REFRESHED")
@@ -293,18 +299,23 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         return cell
     }
-
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
         guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             return
         }
+        SDImageCache.shared().clearMemory()
+        SDImageCache.shared().clearDisk()
+        desVC.selectedIndex = indexPath
         if collectionView == exploreCollectionView {
             desVC.photos = self.explorePhotos
         } else {
             desVC.photos = self.searchPhotos
         }
-        desVC.selectedIndex = indexPath
         show(desVC, sender: nil)
     }
 

@@ -58,7 +58,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     func detailViewContentSet(flickrPhoto: Photo){
         avatar.sd_setImage(with: flickrPhoto.avatarURL as URL?)
-        print ("\(flickrPhoto.avatarURL)")
         usernameLabel.text = flickrPhoto.ownername
         
         photoTitle.text = flickrPhoto.title
