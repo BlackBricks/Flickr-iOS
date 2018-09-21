@@ -17,7 +17,7 @@ struct FlickrURL {
     let searchTags = "&tags="
     let extras = "&extras=url_c,url_m,url_s,url_n,url_t,owner_name,date_upload,views,icon_server"
     let sort = "&sort=relevance"
-    let photosPerPage = "&per_page=50"
+    let photosPerPage = "&per_page=20"
     let recentPhotosPerPage = "&per_page=50"
     let page = "&page="
     let format = "&format=json&nojsoncallback=1"
