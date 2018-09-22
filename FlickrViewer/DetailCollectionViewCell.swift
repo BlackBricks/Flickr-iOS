@@ -33,23 +33,40 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     var detailDelegate: DetailViewCellDelegate?
-    
     var definedSize: CGSize?
+    var isImageZoomed = false {
+        didSet {
+            print (isImageZoomed)
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 6.0
-        
-        
+        scrollView.maximumZoomScale = 3.0
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        tapRecognizer.numberOfTapsRequired = 1
         self.addGestureRecognizer(tapRecognizer)
+        
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        self.addGestureRecognizer(doubleTapRecognizer)
+        
+        tapRecognizer.require(toFail: doubleTapRecognizer)
     }
     
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if scrollView.zoomScale > 1 {
+            isImageZoomed = true
+        } else {
+            isImageZoomed = false
+        }
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
         let leftMargin = (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5
         let topMargin = (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5
         scrollView.contentInset = UIEdgeInsets(top: max(0, topMargin), left: max(0, leftMargin), bottom: 0, right: 0)
@@ -62,6 +79,21 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     @objc private func tap(){
         topView.isHidden = !topView.isHidden
         bottomView.isHidden = !bottomView.isHidden
+        
+    }
+    
+    @objc func doubleTap(){
+        if isImageZoomed {
+            UIView.animate(withDuration: 0.4) { [weak self] in
+                self?.scrollView.zoomScale = 1
+                self?.isImageZoomed = false
+            }
+        } else {
+            UIView.animate(withDuration: 0.4) { [weak self] in
+                self?.scrollView.zoomScale = 3
+                self?.isImageZoomed = true
+            }
+        }
     }
     
     func detailViewContentSet(flickrPhoto: Photo){
@@ -76,5 +108,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
             self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
         }
         scrollView.zoomScale = 1
+        isImageZoomed = false
     }
 }
