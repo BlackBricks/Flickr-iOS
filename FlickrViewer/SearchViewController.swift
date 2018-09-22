@@ -265,6 +265,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard justifiedSizes.count != 0 else {
             return CGSize(width: 0.5, height: 0.5)
         }
+        guard indexPath.row < explorePhotos.count else {
+            print("IndexPath is out of range")
+            return CGSize(width: 0.5, height: 0.5)
+        }
         return justifiedSizes[indexPath.item]
     }
 

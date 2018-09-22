@@ -16,6 +16,7 @@ protocol DetailViewCellDelegate {
 
 class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var currentImage:UIImageView!
     
     @IBOutlet weak var topView: UIView!
@@ -37,8 +38,25 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 6.0
+        
+        
+        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         self.addGestureRecognizer(tapRecognizer)
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let leftMargin = (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5
+        let topMargin = (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5
+        scrollView.contentInset = UIEdgeInsets(top: max(0, topMargin), left: max(0, leftMargin), bottom: 0, right: 0)
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return currentImage
     }
     
     @objc private func tap(){
@@ -53,17 +71,10 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         photoTitle.text = flickrPhoto.title
         countViews.text = "Views \(flickrPhoto.views)"
         
-        let width = flickrPhoto.size().width
-        let height = flickrPhoto.size().height
-        let aspectRatio = width/height
-        let newWidth = self.frame.size.width
-        let newHeight = CGFloat(height/aspectRatio)
-        definedSize = CGSize(width: newWidth, height: newHeight)
-        currentImage.frame.size = CGSize(width: newWidth, height: newHeight)
-        currentImage.frame.origin.y = self.frame.midY - newHeight/2
         currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
         { (image, error, cache, url) in
             self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
         }
+        scrollView.zoomScale = 1
     }
 }
