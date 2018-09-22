@@ -265,9 +265,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SVa-tc-Mbv">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SVa-tc-Mbv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="7JX-WY-70b">
                                     <size key="itemSize" width="375" height="648"/>
@@ -277,7 +276,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" reuseIdentifier="DetailCollectionViewCell" id="ssz-MU-H8n" customClass="DetailCollectionViewCell" customModule="FlickrViewer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="-0.5" width="375" height="648"/>
+                                        <rect key="frame" x="0.0" y="9.5" width="375" height="648"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="648"/>
@@ -305,13 +304,9 @@
                                                         <outlet property="delegate" destination="ssz-MU-H8n" id="d5Q-Ov-L2b"/>
                                                     </connections>
                                                 </scrollView>
-                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="htp-fB-eRo">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htp-fB-eRo">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XxI-o6-fig">
-                                                            <rect key="frame" x="15" y="0.0" width="66" height="62"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-oz-4Kq">
                                                             <rect key="frame" x="95" y="16" width="224" height="29"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -330,15 +325,18 @@
                                                                 <action selector="detailViewClosing:" destination="ssz-MU-H8n" eventType="touchUpInside" id="K3d-I2-4xQ"/>
                                                             </connections>
                                                         </button>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XxI-o6-fig">
+                                                            <rect key="frame" x="15" y="4" width="66" height="62"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="70" id="AUC-vM-8Vt"/>
                                                     </constraints>
                                                 </view>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p4R-16-rEI">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p4R-16-rEI">
                                                     <rect key="frame" x="0.0" y="578" width="375" height="70"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6O-dS-ki6">
                                                             <rect key="frame" x="8" y="4" width="359" height="21"/>
@@ -356,6 +354,9 @@
                                                         </label>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="70" id="mGi-fl-hvh"/>
+                                                    </constraints>
                                                 </view>
                                             </subviews>
                                         </view>
@@ -364,10 +365,13 @@
                                             <constraint firstAttribute="bottom" secondItem="T8G-3d-Ubf" secondAttribute="bottom" id="3QO-Hf-q04"/>
                                             <constraint firstAttribute="trailing" secondItem="htp-fB-eRo" secondAttribute="trailing" id="5e6-Yl-dPF"/>
                                             <constraint firstAttribute="trailing" secondItem="T8G-3d-Ubf" secondAttribute="trailing" id="7Gc-yO-Wox"/>
-                                            <constraint firstItem="htp-fB-eRo" firstAttribute="top" secondItem="ssz-MU-H8n" secondAttribute="top" constant="-20" id="CSH-gd-qrZ"/>
+                                            <constraint firstItem="htp-fB-eRo" firstAttribute="top" secondItem="ssz-MU-H8n" secondAttribute="top" id="CSH-gd-qrZ"/>
                                             <constraint firstItem="T8G-3d-Ubf" firstAttribute="top" secondItem="ssz-MU-H8n" secondAttribute="top" id="EHv-KS-nTU"/>
+                                            <constraint firstAttribute="bottom" secondItem="p4R-16-rEI" secondAttribute="bottom" id="F1b-Ez-HQp"/>
                                             <constraint firstItem="T8G-3d-Ubf" firstAttribute="leading" secondItem="ssz-MU-H8n" secondAttribute="leading" id="H0K-Hz-uV4"/>
                                             <constraint firstItem="htp-fB-eRo" firstAttribute="leading" secondItem="ssz-MU-H8n" secondAttribute="leading" id="tLe-t4-ZwW"/>
+                                            <constraint firstAttribute="trailing" secondItem="p4R-16-rEI" secondAttribute="trailing" id="v9o-lX-bLG"/>
+                                            <constraint firstItem="p4R-16-rEI" firstAttribute="leading" secondItem="ssz-MU-H8n" secondAttribute="leading" id="y8O-u2-buZ"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="avatar" destination="XxI-o6-fig" id="vJ8-K7-Qfv"/>
@@ -383,6 +387,12 @@
                                 </cells>
                             </collectionView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="SVa-tc-Mbv" firstAttribute="trailing" secondItem="wfe-s0-s8d" secondAttribute="trailing" id="6AV-Xw-1sp"/>
+                            <constraint firstItem="SVa-tc-Mbv" firstAttribute="bottom" secondItem="wfe-s0-s8d" secondAttribute="bottom" id="A5T-Qs-P6W"/>
+                            <constraint firstItem="SVa-tc-Mbv" firstAttribute="leading" secondItem="wfe-s0-s8d" secondAttribute="leading" id="EDv-rl-gIA"/>
+                            <constraint firstItem="SVa-tc-Mbv" firstAttribute="top" secondItem="iNm-W5-VWF" secondAttribute="top" id="mOi-hM-AxH"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="wfe-s0-s8d"/>
                     </view>
                     <connections>
