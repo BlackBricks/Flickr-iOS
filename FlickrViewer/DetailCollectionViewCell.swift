@@ -17,13 +17,15 @@ protocol DetailViewCellDelegate {
 class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var currentImage:UIImageView!
+    @IBOutlet weak var currentImage: UIImageView!
     
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var topGradientView: UIView!
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
 
     @IBOutlet weak var bottomView: UIView!
+    @IBOutlet weak var bottomGradientView: UIView!
     @IBOutlet weak var photoTitle: UILabel!
     @IBOutlet weak var countViews: UILabel!
     
@@ -39,6 +41,24 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        
+        //MARK - gradient top
+        let topGradientLayer = CAGradientLayer()
+        topGradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        topGradientLayer.startPoint = CGPoint(x: 1, y: 0)
+        topGradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        topGradientLayer.frame = topGradientView.bounds
+        topGradientView.layer.addSublayer(topGradientLayer)
+        
+        //MARK - gradient bottom
+        let bottomGradientLayer = CAGradientLayer()
+        bottomGradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        bottomGradientLayer.startPoint = CGPoint(x: 1, y: 1)
+        bottomGradientLayer.endPoint = CGPoint(x: 1, y: 0)
+        bottomGradientLayer.frame = bottomGradientView.bounds
+        bottomGradientView.layer.addSublayer(bottomGradientLayer)
+        
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 3.0
         
@@ -52,6 +72,8 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         
         tapRecognizer.require(toFail: doubleTapRecognizer)
     }
+    
+   
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
@@ -72,13 +94,13 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         return currentImage
     }
     
-    @objc private func tap(){
+    @objc private func tap() {
         topView.isHidden = !topView.isHidden
         bottomView.isHidden = !bottomView.isHidden
         
     }
     
-    @objc func doubleTap(){
+    @objc func doubleTap() {
         if isImageZoomed {
             UIView.animate(withDuration: 0.4) { [weak self] in
                 self?.scrollView.zoomScale = 1
@@ -92,15 +114,24 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
-    func detailViewContentSet(flickrPhoto: Photo){
+    
+    
+    func detailViewContentSet(flickrPhoto: Photo) {
+        
+        avatar.layer.borderWidth = 1
+        avatar.layer.masksToBounds = false
+        avatar.layer.borderColor = UIColor.white.cgColor
+        avatar.layer.cornerRadius = avatar.frame.height/2
+        avatar.clipsToBounds = true
+        
+        //MARK - labels set
         avatar.sd_setImage(with: flickrPhoto.avatarURL as URL?)
         usernameLabel.text = flickrPhoto.ownername
         
         photoTitle.text = flickrPhoto.title
         countViews.text = "Views \(flickrPhoto.views)"
         
-        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
-        { (image, error, cache, url) in
+        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?) { (image, error, cache, url) in
             self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
         }
         scrollView.zoomScale = 1

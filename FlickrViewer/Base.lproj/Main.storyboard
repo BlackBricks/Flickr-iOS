@@ -307,6 +307,9 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htp-fB-eRo">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                                     <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aii-yT-moO">
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                                        </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-oz-4Kq">
                                                             <rect key="frame" x="95" y="16" width="224" height="29"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -330,14 +333,20 @@
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="70" id="AUC-vM-8Vt"/>
+                                                        <constraint firstItem="Aii-yT-moO" firstAttribute="top" secondItem="htp-fB-eRo" secondAttribute="top" id="Rt0-8z-DqS"/>
+                                                        <constraint firstItem="Aii-yT-moO" firstAttribute="leading" secondItem="htp-fB-eRo" secondAttribute="leading" id="ic5-a2-bBb"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Aii-yT-moO" secondAttribute="trailing" id="pIs-2F-4G6"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Aii-yT-moO" secondAttribute="bottom" id="zdI-2N-t2k"/>
                                                     </constraints>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p4R-16-rEI">
                                                     <rect key="frame" x="0.0" y="578" width="375" height="70"/>
                                                     <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I8f-tV-J6n">
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                                        </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6O-dS-ki6">
                                                             <rect key="frame" x="8" y="4" width="359" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -353,9 +362,12 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="I8f-tV-J6n" secondAttribute="bottom" id="0Y6-4z-BYv"/>
+                                                        <constraint firstAttribute="trailing" secondItem="I8f-tV-J6n" secondAttribute="trailing" id="74P-o9-dtW"/>
+                                                        <constraint firstItem="I8f-tV-J6n" firstAttribute="top" secondItem="p4R-16-rEI" secondAttribute="top" id="YLV-Vf-7p1"/>
                                                         <constraint firstAttribute="height" constant="70" id="mGi-fl-hvh"/>
+                                                        <constraint firstItem="I8f-tV-J6n" firstAttribute="leading" secondItem="p4R-16-rEI" secondAttribute="leading" id="tNQ-rE-N27"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -375,11 +387,13 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="avatar" destination="XxI-o6-fig" id="vJ8-K7-Qfv"/>
+                                            <outlet property="bottomGradientView" destination="I8f-tV-J6n" id="6CL-wL-Ieh"/>
                                             <outlet property="bottomView" destination="p4R-16-rEI" id="cKM-Im-AeW"/>
                                             <outlet property="countViews" destination="pEI-tG-a45" id="GAL-5I-Ka6"/>
                                             <outlet property="currentImage" destination="dwp-gR-Wcg" id="lT0-2m-UOB"/>
                                             <outlet property="photoTitle" destination="n6O-dS-ki6" id="yOc-Zj-msZ"/>
                                             <outlet property="scrollView" destination="T8G-3d-Ubf" id="59f-xe-bvY"/>
+                                            <outlet property="topGradientView" destination="Aii-yT-moO" id="GcW-UL-dKy"/>
                                             <outlet property="topView" destination="htp-fB-eRo" id="Cc9-Ci-IiC"/>
                                             <outlet property="usernameLabel" destination="Lcw-oz-4Kq" id="1V7-54-s4c"/>
                                         </connections>

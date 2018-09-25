@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E0B4E902155046B00820CAE /* ZoomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0B4E8F2155046B00820CAE /* ZoomImageView.swift */; };
 		0E5938C82152313A000E681F /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */; };
 		0E8601292148D89500F15102 /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */; };
 		0E97290F214A624400A36795 /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */; };
@@ -33,7 +32,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0E0B4E8F2155046B00820CAE /* ZoomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomImageView.swift; sourceTree = "<group>"; };
 		0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		0E8601282148D89500F15102 /* RecentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		0E97290E214A622F00A36795 /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Black.ttf"; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 				F3FB948520ECBB350073B4C6 /* FlickrPhotos.swift */,
 				F370EC11212564650068ED7B /* FlickrURL.swift */,
 				F39F9AEB20DAA9CA00BC57B7 /* AppDelegate.swift */,
-				0E0B4E8F2155046B00820CAE /* ZoomImageView.swift */,
 				F39F9AEF20DAA9CA00BC57B7 /* Main.storyboard */,
 				0E5938C72152313A000E681F /* ImageCollectionViewCell.xib */,
 				F39F9AF520DAA9CF00BC57B7 /* Assets.xcassets */,
@@ -278,7 +275,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F362EB4C213FD637001F59E1 /* UIKitIntegration.swift in Sources */,
-				0E0B4E902155046B00820CAE /* ZoomImageView.swift in Sources */,
 				F3E39B6C213E979600FB2AC0 /* DetailCollectionViewCell.swift in Sources */,
 				0E8601292148D89500F15102 /* RecentSearchTableViewCell.swift in Sources */,
 				F362EB4D213FD637001F59E1 /* Weighable.swift in Sources */,
