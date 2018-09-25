@@ -34,11 +34,7 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     var detailDelegate: DetailViewCellDelegate?
     var definedSize: CGSize?
-    var isImageZoomed = false {
-        didSet {
-            print (isImageZoomed)
-        }
-    }
+    var isImageZoomed = false 
     
     override func awakeFromNib() {
         super.awakeFromNib()

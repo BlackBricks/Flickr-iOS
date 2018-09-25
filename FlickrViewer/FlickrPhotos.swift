@@ -20,8 +20,10 @@ struct FlickrPhoto: Codable {
 struct Photo: Codable {
     let id: String
     let farm: Int
+    let iconfarm: Int
     let secret: String
     let server: String
+    let iconserver: String
     let height_m: String
     let width_m: String
     let title: String
@@ -39,7 +41,7 @@ struct Photo: Codable {
     }
     
     var avatarURL: NSURL {
-        return NSURL(string:"http://farm\(farm).staticflickr.com/\(server)/buddyicons/\(owner).jpg")!
+        return NSURL(string:"http://farm\(iconfarm).staticflickr.com/\(iconserver)/buddyicons/\(owner).jpg")!
     }
     
     

@@ -118,7 +118,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
 
     private func requestAndParse(flickrUrlString: String) {
-
+        print("\(flickrUrlString)")
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let weakself = self else {
                 return
