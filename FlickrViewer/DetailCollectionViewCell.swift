@@ -8,10 +8,11 @@
 
 import UIKit
 import SDWebImage
-//import ZoomImageView
+
 
 protocol DetailViewCellDelegate {
     func close()
+    var isTopViewHidden: Bool {get set}
 }
 
 class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
@@ -36,12 +37,11 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     var detailDelegate: DetailViewCellDelegate?
     var definedSize: CGSize?
-    var isImageZoomed = false 
+    var isImageZoomed = false
+    var isTopViewHidden = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        
         
         //MARK - gradient top
         let topGradientLayer = CAGradientLayer()
@@ -95,7 +95,12 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     @objc private func tap() {
+        guard var detailDelegate = detailDelegate else {
+            return
+        }
         topView.isHidden = !topView.isHidden
+        detailDelegate.isTopViewHidden = !detailDelegate.isTopViewHidden
+        print("\(detailDelegate.isTopViewHidden)")
         bottomView.isHidden = !bottomView.isHidden
         
     }
@@ -114,8 +119,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
-    
-    
     func detailViewContentSet(flickrPhoto: Photo) {
         
         avatar.layer.borderWidth = 1
@@ -133,6 +136,18 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         
         currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?) { (image, error, cache, url) in
             self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
+        }
+        
+        guard let detailDelegate = detailDelegate else {
+            return
+        }
+        
+        if detailDelegate.isTopViewHidden == true  {
+            topView.isHidden = true
+            bottomView.isHidden = true
+        } else {
+            topView.isHidden = false
+            bottomView.isHidden = false
         }
         scrollView.zoomScale = 1
         isImageZoomed = false
