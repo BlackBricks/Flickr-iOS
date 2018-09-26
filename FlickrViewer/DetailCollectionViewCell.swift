@@ -10,7 +10,7 @@ import UIKit
 import SDWebImage
 
 
-protocol DetailViewCellDelegate {
+protocol DetailViewCellDelegate: class {
     func close()
     var isTopViewHidden: Bool {get set}
 }
@@ -95,12 +95,11 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     @objc private func tap() {
-        guard var detailDelegate = detailDelegate else {
+        guard let detailDelegate = detailDelegate else {
             return
         }
         topView.isHidden = !topView.isHidden
         detailDelegate.isTopViewHidden = !detailDelegate.isTopViewHidden
-        print("\(detailDelegate.isTopViewHidden)")
         bottomView.isHidden = !bottomView.isHidden
         
     }
@@ -121,6 +120,7 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     func detailViewContentSet(flickrPhoto: Photo) {
         
+        //MARK - avatar set
         avatar.layer.borderWidth = 1
         avatar.layer.masksToBounds = false
         avatar.layer.borderColor = UIColor.white.cgColor
@@ -134,21 +134,18 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         photoTitle.text = flickrPhoto.title
         countViews.text = "Views \(flickrPhoto.views)"
         
+        //MARK - photo set
         currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?) { (image, error, cache, url) in
             self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
         }
         
+        //MARK - top/bottom views control
         guard let detailDelegate = detailDelegate else {
             return
         }
-        
-        if detailDelegate.isTopViewHidden == true  {
-            topView.isHidden = true
-            bottomView.isHidden = true
-        } else {
-            topView.isHidden = false
-            bottomView.isHidden = false
-        }
+        print(detailDelegate.isTopViewHidden)
+        topView.isHidden = detailDelegate.isTopViewHidden
+        bottomView.isHidden = detailDelegate.isTopViewHidden
         scrollView.zoomScale = 1
         isImageZoomed = false
     }
