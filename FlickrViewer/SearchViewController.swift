@@ -65,8 +65,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        SDImageCache.shared().clearMemory()
-        SDImageCache.shared().clearDisk()
         UIApplication.shared.statusBarView?.backgroundColor = UIColor.gray
         activityIndicator.startAnimating()
         exploreCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
@@ -313,7 +311,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             return
         }
         SDImageCache.shared().clearMemory()
-        SDImageCache.shared().clearDisk()
         desVC.selectedIndex = indexPath
         if collectionView == exploreCollectionView {
             desVC.photos = self.explorePhotos

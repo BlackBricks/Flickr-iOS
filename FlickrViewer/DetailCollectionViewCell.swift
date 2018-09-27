@@ -39,6 +39,7 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     var definedSize: CGSize?
     var isImageZoomed = false
     var isTopViewHidden = false
+    var tapCoordinateRecognizer: UIGestureRecognizer?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -68,12 +69,11 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         
         let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
         doubleTapRecognizer.numberOfTapsRequired = 2
+        tapCoordinateRecognizer = doubleTapRecognizer
         self.addGestureRecognizer(doubleTapRecognizer)
         
         tapRecognizer.require(toFail: doubleTapRecognizer)
     }
-    
-   
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
@@ -98,13 +98,27 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         guard let detailDelegate = detailDelegate else {
             return
         }
-        topView.isHidden = !topView.isHidden
         detailDelegate.isTopViewHidden = !detailDelegate.isTopViewHidden
-        bottomView.isHidden = !bottomView.isHidden
+        topView.isHidden = detailDelegate.isTopViewHidden
+        bottomView.isHidden = detailDelegate.isTopViewHidden
         
     }
     
+    @objc func imageTapped(recognizer : UIGestureRecognizer) {
+        let tappedPoint: CGPoint = recognizer.location(in: scrollView)
+        let x: CGFloat = tappedPoint.x
+        let y: CGFloat = tappedPoint.y
+        
+        print(tappedPoint)
+        print(x)
+        print(y)
+    }
+    
     @objc func doubleTap() {
+        guard let tapCoordinates = tapCoordinateRecognizer else {
+            return
+        }
+        imageTapped(recognizer: tapCoordinates)
         if isImageZoomed {
             UIView.animate(withDuration: 0.4) { [weak self] in
                 self?.scrollView.zoomScale = 1
@@ -143,7 +157,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         guard let detailDelegate = detailDelegate else {
             return
         }
-        print(detailDelegate.isTopViewHidden)
         topView.isHidden = detailDelegate.isTopViewHidden
         bottomView.isHidden = detailDelegate.isTopViewHidden
         scrollView.zoomScale = 1
