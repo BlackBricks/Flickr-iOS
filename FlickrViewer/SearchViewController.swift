@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SDWebImage
 
 class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchCellDelegate {
 
@@ -64,6 +65,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.statusBarView?.backgroundColor = UIColor.gray
         activityIndicator.startAnimating()
         exploreCollectionView.contentInset.top = searchBarView.frame.height + basicOffset
         exploreCollectionView.showsVerticalScrollIndicator = false
@@ -112,7 +114,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     }
 
     private func requestAndParse(flickrUrlString: String) {
-
+        print("\(flickrUrlString)")
         request = Alamofire.request(flickrUrlString).responseJSON { [weak self] response in
             guard let weakself = self else {
                 return
@@ -259,6 +261,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard justifiedSizes.count != 0 else {
             return CGSize(width: 0.5, height: 0.5)
         }
+        guard indexPath.row < explorePhotos.count else {
+            print("IndexPath is out of range")
+            return CGSize(width: 0.5, height: 0.5)
+        }
         return justifiedSizes[indexPath.item]
     }
 
@@ -293,18 +299,21 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
         return cell
     }
-
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
         guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             return
         }
+        desVC.selectedIndex = indexPath
         if collectionView == exploreCollectionView {
             desVC.photos = self.explorePhotos
         } else {
             desVC.photos = self.searchPhotos
         }
-        desVC.selectedIndex = indexPath
         show(desVC, sender: nil)
     }
 

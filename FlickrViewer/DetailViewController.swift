@@ -12,10 +12,17 @@ import SDWebImage
 
 class DetailViewController: UIViewController, DetailViewCellDelegate {
     
+    var isTopViewHidden = false 
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     var photos: [Photo] = []
     var selectedIndex: IndexPath? = nil
+    
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +31,11 @@ class DetailViewController: UIViewController, DetailViewCellDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        collectionView.scrollToItem(at: selectedIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        collectionView.reloadData()
+        guard let indexToScroll = selectedIndex else {
+            return
+        }
+
+        collectionView.scrollToItem(at: indexToScroll, at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
     }
     
     //MARK - Detail View closing function
@@ -46,8 +53,9 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCollectionViewCell", for: indexPath) as? DetailCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.detailViewContentSet(flickrPhoto: photos[indexPath.row])
         cell.detailDelegate = self
+        cell.detailViewContentSet(flickrPhoto: photos[indexPath.row])
+        
         return cell
     }
     
