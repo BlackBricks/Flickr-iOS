@@ -106,8 +106,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     @objc func refresh() {
         self.explorePhotos = []
         self.justifiedSizes = []
-        SDImageCache.shared().clearMemory()
-        SDImageCache.shared().clearDisk()
         self.getExploreFlickrPhotos(pageNumber: 1) {
             self.refreshControl.endRefreshing()
             print("POPULAR PHOTOS REFRESHED")
@@ -310,7 +308,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             return
         }
-        SDImageCache.shared().clearMemory()
         desVC.selectedIndex = indexPath
         if collectionView == exploreCollectionView {
             desVC.photos = self.explorePhotos

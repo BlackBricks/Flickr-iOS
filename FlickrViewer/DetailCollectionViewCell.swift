@@ -36,7 +36,6 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     var detailDelegate: DetailViewCellDelegate?
-    var definedSize: CGSize?
     var isImageZoomed = false
     var isTopViewHidden = false
     var tapCoordinateRecognizer: UIGestureRecognizer?
@@ -104,29 +103,25 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         
     }
     
-    @objc func imageTapped(recognizer : UIGestureRecognizer) {
+    @objc func imageTapped(recognizer : UIGestureRecognizer) -> CGPoint{
         let tappedPoint: CGPoint = recognizer.location(in: scrollView)
-        let x: CGFloat = tappedPoint.x
-        let y: CGFloat = tappedPoint.y
-        
-        print(tappedPoint)
-        print(x)
-        print(y)
+        return tappedPoint
     }
     
     @objc func doubleTap() {
-        guard let tapCoordinates = tapCoordinateRecognizer else {
+        guard let recognizer = tapCoordinateRecognizer else {
             return
         }
-        imageTapped(recognizer: tapCoordinates)
+        let tapCoordinates = imageTapped(recognizer: recognizer)
         if isImageZoomed {
             UIView.animate(withDuration: 0.4) { [weak self] in
                 self?.scrollView.zoomScale = 1
                 self?.isImageZoomed = false
+                
             }
         } else {
             UIView.animate(withDuration: 0.4) { [weak self] in
-                self?.scrollView.zoomScale = 3
+                self?.scrollView.zoom(to: CGRect(origin: tapCoordinates, size: CGSize(width: 10, height: 10)), animated: false)
                 self?.isImageZoomed = true
             }
         }
@@ -149,9 +144,7 @@ class DetailCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         countViews.text = "Views \(flickrPhoto.views)"
         
         //MARK - photo set
-        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?) { (image, error, cache, url) in
-            self.currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?, placeholderImage: self.currentImage.image)
-        }
+        currentImage.sd_setImage(with: NSURL(string: flickrPhoto.url_c) as URL?)
         
         //MARK - top/bottom views control
         guard let detailDelegate = detailDelegate else {
