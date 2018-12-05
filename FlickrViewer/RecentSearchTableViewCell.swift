@@ -21,7 +21,7 @@ class RecentSearchTableViewCell: UITableViewCell {
     @IBOutlet weak var recenSearchLabel: UILabel!
     
     @IBAction func removeCell(_ sender: UIButton) {
-        recentSearchCellDelegate?.removeCell(cell: self, indexPath: cellIndex!)
+        recentSearchCellDelegate?.removeCell(cell: self, indexPath: cellIndex ?? IndexPath())
     }
     
     func recentSearchSet (recentSearch: String) {
