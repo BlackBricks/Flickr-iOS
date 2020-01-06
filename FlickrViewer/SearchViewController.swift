@@ -78,16 +78,20 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         refreshControl.addTarget(self, action: #selector(SearchViewController.refresh), for: .valueChanged)
         self.exploreCollectionView.addSubview(refreshControl)
 
-        //Mark: - first request
-        getExploreFlickrPhotos(pageNumber: 1) {
-            self.currentLoadedPage = 1
-        }
-
+        
         self.exploreCollectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCollectionViewCell")
         self.searchResultsCollectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCollectionViewCell")
 
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(false)
+        //Mark: - first request
+        getExploreFlickrPhotos(pageNumber: 1) {
+            self.currentLoadedPage = 1
+        }
+    }
+    
     @objc func refresh() {
         self.explorePhotos = []
         self.justifiedSizes = []
@@ -230,7 +234,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth, preferredHeight: layoutPreferredHeight)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 7, preferredHeight: self.view.frame.height/5)
         return tempJustifiedSizes
     }
     
@@ -320,7 +324,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     //MARK: - Search Bar Scroll Hiding
-    func setSearchBarVisible(visibility: Bool) {
+    func setSearchBar(visibility: Bool) {
         guard searchBarIsVisible != visibility else {
             return
         }
@@ -350,9 +354,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         lastContentOffset = scrollView.contentOffset.y
 
         if !scrollingUp {
-            setSearchBarVisible(visibility: true)
+            setSearchBar(visibility: true)
         } else if scrollView.contentOffset.y > 0 {
-            setSearchBarVisible(visibility: false)
+            setSearchBar(visibility: false)
         }
 
         //MARK - Pagination

@@ -17,8 +17,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
         imageView.sd_setImage(with: NSURL(string: flickrPhoto.url_t) as URL?)
         { (image, error, cache, url) in
             self.imageView.sd_setImage(with: NSURL(string: flickrPhoto.url_m) as URL?, placeholderImage: self.imageView.image)
-            
         }
-        
     }
 }
