@@ -24,8 +24,8 @@ struct Photo: Codable {
     let secret: String
     let server: String
     let iconserver: String
-    let height_m: String
-    let width_m: String
+    let height_m: Int
+    let width_m: Int
     let title: String
     let ownername: String
     let owner: String
@@ -47,21 +47,18 @@ struct Photo: Codable {
     
     
     func isPhotoSizeValid() -> Bool {
-        guard
-            let _ = Int(width_m),
-            let _ = Int(height_m) else {
-                return false
-        }
+//        guard let _ = Int(width_m) else {
+//                return false
+//        }
         return true
     }
     
     func size() -> CGSize {
-        guard
-            let width = Int(width_m),
-            let height = Int(height_m) else {
-                return CGSize.zero
-        }
-        return CGSize(width: width, height: height)
+//        guard
+//            let width = Int(width_m) else {
+//                return CGSize.zero
+//        }
+        return CGSize(width: width_m, height: height_m)
     }
 }
 
