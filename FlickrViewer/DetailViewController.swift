@@ -10,7 +10,7 @@ import UIKit
 import SDWebImage
 
 
-class DetailViewController: UIViewController, DetailViewCellDelegate {
+class DetailViewController: UIViewController {
     
     var isTopViewHidden = false 
     
@@ -19,13 +19,17 @@ class DetailViewController: UIViewController, DetailViewCellDelegate {
     var photos: [Photo] = []
     var selectedIndex: IndexPath? = nil
     
-    
     override var prefersStatusBarHidden: Bool {
-        return true
+      return true
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNeedsStatusBarAppearanceUpdate() 
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -34,14 +38,9 @@ class DetailViewController: UIViewController, DetailViewCellDelegate {
         guard let indexToScroll = selectedIndex else {
             return
         }
-
         collectionView.scrollToItem(at: indexToScroll, at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
     }
     
-    //MARK - Detail View closing function
-    func close() {
-        self.dismiss(animated: true, completion: nil)
-    }
 }
 
 extension DetailViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
@@ -61,5 +60,12 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
+    }
+}
+
+extension DetailViewController: DetailViewCellDelegate {
+    //MARK - Detail View closing function
+    func close() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

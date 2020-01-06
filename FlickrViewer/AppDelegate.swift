@@ -17,10 +17,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
-//extension UIApplication {
-//    
-//    var statusBarView: UIView? {
-//        return value(forKey: "statusBar") as? UIView
-//    }
-//    
-//}
+

@@ -43,7 +43,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     @IBOutlet weak var searchResultsCollectionView: UICollectionView!
 
     
-    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        if #available(iOS 13.0, *) {
+            return .darkContent
+        } else {
+            return .default
+        }
+    }
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -60,19 +66,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
         cancelButton.alpha = 0
         searchResultsView.layer.opacity = 0
 
-        //MARK: - layout settings
-
-        if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = basicOffset
-            layout.sectionInset.left = basicOffset
-            layout.sectionInset.right = basicOffset
-        }
         
-        if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = basicOffset
-            layout.sectionInset.left = basicOffset
-            layout.sectionInset.right = basicOffset
-        }
 
         //MARK: - refresher
         refreshControl.addTarget(self, action: #selector(SearchViewController.refresh), for: .valueChanged)
@@ -86,6 +80,21 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
+        
+        //MARK: - justified layouts settings
+
+        if let layout = exploreCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = basicOffset
+            layout.sectionInset.left = -4
+            layout.sectionInset.right = -4
+        }
+        
+        if let layout = searchResultsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = basicOffset/2
+            layout.sectionInset.left = basicOffset/2
+            layout.sectionInset.right = basicOffset/2
+        }
+        
         //Mark: - first request
         getExploreFlickrPhotos(pageNumber: 1) {
             self.currentLoadedPage = 1
@@ -234,7 +243,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, RecentSearchC
             unfetchedSizes.append(size)
         }
         var tempJustifiedSizes: [CGSize] = []
-        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 7, preferredHeight: self.view.frame.height/5)
+        tempJustifiedSizes = unfetchedSizes.lay_justify(for: layoutWidth - basicOffset * 3, preferredHeight: self.view.frame.height/5)
         return tempJustifiedSizes
     }
     
@@ -320,7 +329,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         } else {
             desVC.photos = self.searchPhotos
         }
-        show(desVC, sender: nil)
+        desVC.modalPresentationStyle = .fullScreen
+        self.present(desVC, animated: true, completion: nil)
     }
 
     //MARK: - Search Bar Scroll Hiding
